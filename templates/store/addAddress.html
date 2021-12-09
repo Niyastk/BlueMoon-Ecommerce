@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="ml-5 col-10">
+  <ul class="checkout-steps">
+    <li>
+      <h2 class="step-title mt-5">Billing details</h2>
+
+      <form action="{% url 'add_address' %}" id="checkout-form" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>First name
+                <abbr class="required" title="required">*</abbr>
+              </label>
+              <input type="text" class="form-control" name="address_first_name" required />
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Last name
+                <abbr class="required" title="required">*</abbr></label>
+              <input type="text" class="form-control" name="address_last_name" />
+            </div>
+          </div>
+        </div>
+
+        <div class="select-custom">
+          <label>Country / Region
+            <abbr title="required"></abbr></label>
+          <input type="text" class="form-control" name="address_country" />
+        </div>
+
+        <div class="form-group mb-1 pb-2">
+          <label>Street address
+            <abbr class="required" title="required">*</abbr></label>
+          <input type="text" class="form-control" placeholder="House number and street name"
+            name="address_street_address" required />
+        </div>
+
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Apartment, suite, unite, etc. (optional)"
+            name="address_apartment_name" />
+        </div>
+
+        <div class="form-group">
+          <label>Town / City
+            <abbr class="required" title="required"></abbr></label>
+          <input type="text" class="form-control" required name="address_town" />
+        </div>
+
+        <div class="form-group">
+          <label>Postcode / Zip
+            <abbr class="required" title="required">*</abbr></label>
+          <input type="text" class="form-control" name="address_postcode" required />
+        </div>
+
+        <div class="form-group">
+          <label>Phone <abbr class="required" title="required">*</abbr></label>
+          <input type="tel" class="form-control" name="address_phone_number" required />
+        </div>
+
+        <div class="form-group">
+          <label>Email address
+            <abbr class="required" title="required">*</abbr></label>
+          <input type="email" class="form-control" name="address_email" required />
+        </div>
+        <button style="width:6em; height: 3em; padding:0px; font-size:12px; border-radius:7px"
+          class="btn btn-info float-right ">Submit</button>
+      </form>
+
+    </li>
+  </ul>
+</div>
+<div class="form-group mb-1 ml-3">
+  <a>This will use for delivering an item </a>
+</div>
+
+{% endblock %}

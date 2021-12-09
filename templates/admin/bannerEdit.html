@@ -1,0 +1,110 @@
+{% extends 'admin/adminBase.html' %}
+{% block content %}
+
+<div class="body container d-flex py-3 col-lg-10">
+  <div class="container-xxl">
+
+    <div class="row align-items-center">
+      <div class="border-0 mb-4">
+        <div
+          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+          <h3 class="fw-bold mb-0">Banner Edit</h3>
+        </div>
+      </div>
+    </div> <!-- Row end  -->
+  </div>
+  <div class="col-xl-12 col-lg-12">
+    <div class="card mb-3">
+      <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+        <h6 class="mb-0 fw-bold ">Banner information</h6>
+      </div>
+      <div class="card-body">
+        <!-- form -->
+        <form method="POST" action="{% url 'bannerEdit' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3 align-items-center">
+            <div class="col-md-12">
+              <label class="form-label">Tag line</label>
+              <input type="text" id="check_name" class="form-control" name="banner_tagline"
+                value="{{banner_details.tag_line }}">
+              <p class="pl-2 " style="color: red;font-size:12px;font-style: italic;" id="display_name_error"></p>
+            </div>
+
+            <div class="col-md-12  ">
+              <label class="form-label">Banner Heading</label>
+              <input type=" text" class="form-control" name="banner_heading" value="{{banner_details.heading }}">
+            </div>
+          </div>
+          <div class="col-md-12 mt-4">
+            <label class="form-label">Offer Percentage</label>
+            <input type=" text" class="form-control" name="banner_percentage"
+              value="{{banner_details.offer_percentage }}">
+          </div>
+          <div class="col-md-12 mt-4 ">
+            <label class="form-label">Starting Price / custom line</label>
+            <input type=" text" class="form-control" name="starting_price" value="{{banner_details.starting_price }}">
+          </div>
+          <div class="col-md-12 mt-4 ">
+            <label class="form-label">Button Url / link</label>
+            <input type=" text" class="form-control" name="button_url" value="{{banner_details.button_url }}">
+          </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+          <h6 class="mb-0 fw-bold ">Banner Image</h6>
+        </div>
+        <div class="card-body">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-12">
+              <label class="form-label">Banner Images Upload</label>
+              <small class="d-block text-muted mb-2">Try to use the same pixels for banner</small>
+              <input onchange="fileValidation('banner_image')" class="form-control" type="file" id="banner_image"
+                name="banner_image" class="dropify">
+              <img class="w70 rounded img-fluid mt-4" src="{{banner_details.banner_image.url}}" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" id="submit_button"
+        class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Save</button>
+      </form>
+
+      <!-- form ends -->
+
+    </div>
+  </div>
+</div>
+</div><!-- Row end  -->
+
+</div>
+
+<script>
+  function fileValidation(id) {
+    var fileInput = document.getElementById(id);
+    var filePath = fileInput.value;
+    // Allowing file type
+    var allowedExtensions =
+      /(\.jpg|\.jpeg|\.png)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+
+      Swal.fire({
+        title: 'Invalid Filetype',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+
+        }
+      })
+      fileInput.value = '';
+      return false;
+    } else {
+      console.log("valid file type")
+    }
+
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'admin/adminBase.html' %}
+
+{% block content %}
+
+<section class="content-main">
+  <div class="content-header">
+    <h2 class="content-title">Offers</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <form action="{% url 'offerAdd' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label for="product_name" class="form-label">offer Name</label>
+              <input type="text" placeholder="Type here" class="form-control" required name="offer_name"
+                id="product_name" />
+            </div>
+            <div class="mb-4">
+              <label for="product_slug" class="form-label">Offer Percentage</label>
+              <input type="number" placeholder="Type here" class="form-control" required name="offer_percentage"
+                id="product_slug" />
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Expiry Date</label>
+              <input type="date" placeholder="Expiry date" class="form-control" required name="expiry_date"
+                id="expiry_date" />
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Expiry Time</label>
+              <input type="time" placeholder="Expiry date" class="form-control" required name="expiry_time"
+                id="expiry_time" />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Create Offer</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-8">
+          <div class="col-search" style="padding-bottom: 30px;">
+          </div>
+
+          <table class="table table-hover">
+            <thead>
+
+              <tr>
+                <th>Name</th>
+                <th>offer Percentage</th>
+                <th>Expiry_date</th>
+                <th>Expiry_time</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for offer in offers %}
+              <tr>
+                <td><b>{{offer.offer_name}}</b></td>
+                <td>{{offer.percentage}}</td>
+                <td>{{offer.expiry_date}}</td>
+                <td>{{offer.expiry_time}}</td>
+                <td class="text-end">
+                  <div class="dropdown">
+                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light"> <i
+                        class="material-icons md-more_horiz">...</i> </a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="{% url 'offerEdit' offer.id %}">Edit</a>
+                      <a class="dropdown-item text-danger" href="{% url 'offerDelete' offer.id %}"
+                        onclick="return confirm('Are you want to delete?')">Delete</a>
+
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- .col// -->
+      </div>
+      <!-- .row // -->
+    </div>
+    <!-- card body .// -->
+  </div>
+  <!-- card .// -->
+</section>
+<!-- content-main end// -->
+
+<script>
+  //date validation
+  $(function () {
+
+    var dtToday = new Date();
+
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate() + 1;
+    var year = dtToday.getFullYear();
+    var time = dtToday.getHours() + ":" + dtToday.getMinutes();
+    if (month < 10)
+
+      month = '0' + month.toString();
+
+    if (day < 10)
+
+      day = '0' + day.toString();
+
+    var maxDate = year + '-' + month + '-' + day
+
+    console.log(maxDate);
+
+    $('#expiry_date').attr('min', maxDate);
+
+
+  });
+</script>
+
+{% endblock %}

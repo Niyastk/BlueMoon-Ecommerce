@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="main">
+
+  <div class="container reset-password-container">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+        <div class="feature-box pt-5">
+          <div class="feature-box-content">
+            <form class="mb-0" action="{% url 'submitOtp' phone_number %}" method="POST">
+              {% csrf_token %}
+              <div class="form-group mb-0">
+                <label for="reset-email" class="font-weight-normal">Enter your OTP</label>
+                <input type="text" pattern="\d*" maxlength="6" minlength="6" class="form-control" id="reset-email"
+                  name="otp" required placeholder="Enter your OTP" />
+              </div>
+              {% for message in messages %}
+              {% if "invalid_otp" in message.tags %}
+              <p class="pt-2" style="color: red;font-size:12px;font-style: italic;">{{message}}</p>
+              {% endif %}
+              {% endfor %}
+              <div class="form-footer mb-0">
+                <a href="{% url 'signUp' %}">Click here to login</a>
+
+                <button type="submit"
+                  class="btn btn-md btn-primary form-footer-right font-weight-normal text-transform-none mr-0">
+                  Submit OTP
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main><!-- End .main -->
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-12 " id="order" role="tabpanel">
+  <div class="order-content">
+    <h3 class="account-sub-title d-none d-md-block"><i class="sicon-social-dropbox align-middle mr-3"></i>Orders</h3>
+    <div class="order-table-container text-center">
+      <table class="table table-order text-left">
+        <thead>
+          <tr>
+            <th class="order-id">Image</th>
+            <th class="order-id">Products</th>
+            <th class="order-date">Quantity</th>
+            <th class="order-price">Sub Total</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr>
+												<td class="text-center p-0" colspan="5">
+													<p class="mb-5 mt-5">
+														No Order has been made yet.
+													</p>
+												</td>
+											</tr> -->
+          {% for order in orders %}
+          <tr style="color: black;">
+            <td>
+              <div class="owl-dot active">
+                <img src="{{order.product.image.url}}" width="110" height="110" alt="product-thumbnail" />
+              </div>
+            </td>
+            <td style="padding-top: 35px;">{{order.product.product_name}}</td>
+            <td style="padding-top: 35px;"> x {{order.quantity}}</td>
+            <td style="padding-top: 35px;">₹{{order.sub_total}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <hr class="mt-0 mb-3 pb-2" />
+
+
+    </div>
+  </div>
+</div><!-- End .tab-pane -->
+{% endblock %}

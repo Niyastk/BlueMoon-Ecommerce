@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+{% block head %}
+<!-- Plugins CSS File -->
+<link rel="stylesheet" href="{% static 'userAssets/assets/css/bootstrap.min.css' %}">
+
+<!-- Main CSS File -->
+<link rel="stylesheet" href="{% static 'userAssets/assets/css/style.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'userAssets/assets/vendor/fontawesome-free/css/all.min.css' %}">
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+{% endblock %}
+
+<body>
+  <div id="cart_body" class="page-wrapper">
+
+    <main class="main">
+      <div class="container">
+        <ul class="checkout-progress-bar d-flex justify-content-center flex-wrap">
+          {% if cart_items %}
+          <li class="active">
+            <a href="cart.html">Shopping Cart</a>
+          </li>
+          <li>
+            <a href="#">Checkout</a>
+          </li>
+          <li class="disabled">
+            <a href="cart.html">Order Complete</a>
+          </li>
+        </ul>
+
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="cart-table-container" id="table_body">
+              <table class="table table-cart">
+                <thead>
+                  <tr>
+                    <th class="thumbnail-col"></th>
+                    <th class="product-col">Product</th>
+                    <th class="price-col">Price</th>
+                    <th class="qty-col">Quantity</th>
+                    <th class="text-right">Subtotal</th>
+                    <p id="cart_length" class="d-none">{{cart_length}}</p>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  {% for cart_item in cart_items %}
+                  <tr class="product-row">
+                    <td>
+                      <figure class="product-image-container">
+                        <a href="{% url 'productDetails' cart_item.product.id %}" class="product-image">
+                          <img src="{{ cart_item.product.image.url }}" alt="product">
+                        </a>
+
+                        <a onclick="removeProduct('{{cart_item.product.id}}')" class="btn-remove icon-cancel"
+                          title="Remove Product"></a>
+                      </figure>
+                    </td>
+                    <td class="product-col">
+                      <h5 class="product-title">
+                        <a href="{% url 'productDetails' cart_item.product.id %}">{{cart_item.product.product_name}}</a>
+                      </h5>
+                    </td>
+                    {% if cart_item.product.product_offer %}
+                    <td>₹{{ cart_item.product.product_offer_price }}</td>
+                    {% else %}
+                    <td>₹{{ cart_item.product.sale_price }}</td>
+                    {% endif %}
+                    <!-- <td> -->
+                    <!-- <div class="product-single-qty">
+                        <input value="{{ cart_item.quantity }}" class="horizontal-quantity form-control" type="text">
+                      </div> -->
+                    <!-- End .product-single-qty -->
+
+                    <!-- 
+                    </td> -->
+                    <td class="cart-product-quantity" width="110px">
+                      <div class=" quantity">
+                        <div class="d-flex">
+                          <div class="input-group-prepend decrement-btn">
+                            <button onclick="product_decrement('{{cart_item.product.id}}','{{cart_item.quantity}}')"
+                              class="form-control pt-3">-</button>
+                          </div>
+                          <input onchange="cartInput('{{cart_item.product.id}}','{{forloop.counter}}')" type="text"
+                            id="cart_input{{forloop.counter}}" class="qty-input form-control  " maxlength="2" max="10"
+                            value="{{cart_item.quantity}}">
+                          <div class="input-group-append increment-btn">
+                            <button onclick="product_increment('{{cart_item.product.id}}','{{cart_item.quantity}}')"
+                              class="form-control pt-3">+</button>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-right"><span id="sub_total" class="subtotal-price">₹{{ cart_item.sub_total}}</span>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+
+                <tfoot>
+                  <tr>
+                    <td colspan="5" class="clearfix">
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div><!-- End .cart-table-container -->
+          </div><!-- End .col-lg-8 -->
+
+          <div class="col-lg-4">
+            <div class="cart-summary">
+              <h3>CART TOTALS</h3>
+
+              <table id="cart_totals" class="table table-totals">
+                <tbody>
+
+                  <tr>
+                    <td colspan="2" class="text-left">
+                    </td>
+                  </tr>
+                </tbody>
+
+                <tfoot>
+                  <tr>
+                    <td>Grand Total</td>
+                    <td>₹{{total}}</td>
+                  </tr>
+                </tfoot>
+              </table>
+
+              <div class="checkout-methods">
+                <a href="{% url 'checkout' checkout_identifier %}" class="btn btn-block btn-dark">Proceed to Checkout
+                  <i class="fa fa-arrow-right"></i></a>
+              </div>
+            </div><!-- End .cart-summary -->
+          </div><!-- End .col-lg-4 -->
+          {% else %}
+          <h2 class="mt-5 mb-5 ">Your Cart Is Empty</h2>
+          {% endif %}
+        </div><!-- End .row -->
+      </div><!-- End .container -->
+
+      <div class="mb-6"></div><!-- margin -->
+    </main><!-- End .main -->
+  </div><!-- End .page-wrapper -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    function product_increment(id, quantity) {
+      console.log(id)
+      var data = { 'id': id, 'quantity': quantity, 'csrf_token': '{{csrf_token}}' }
+      $.ajax({
+        url: "{% url 'cart_increment' %}",
+        method: "POST",
+        data: data,
+        success: function (response) {
+          var sub_total = response.sub_total
+          var new_quantity = response.new_quantity
+          $("#cart_body").load(window.location.href + " #cart_body"); //for reloading  certain div
+          // $("#cart_totals").load(window.location.href + " #cart_totals"); //for reloading  certain div
+        }
+      })
+    }
+
+    function product_decrement(id, quantity) {
+      console.log(id)
+      var data = { 'id': id, 'quantity': quantity, 'csrf_token': '{{csrf_token}}' }
+
+      $.ajax({
+        url: "{% url 'cart_decrement' %}",
+        method: "POST",
+        data: data,
+        success: function (response) {
+          var sub_total = response.sub_total
+          var new_quantity = response.new_quantity
+          $("#cart_body").load(window.location.href + " #cart_body");
+          // $("#cart_totals").load(window.location.href + " #cart_totals"); //for reloading  certain div
+        }
+      })
+    }
+
+    function cartInput(id, count) {
+      cart_input = document.getElementById(`cart_input${count}`).value;
+      console.log(cart_input)
+      var data = { 'id': id, 'cart_input': cart_input, 'csrf_token': '{{csrf_token}}' }
+      $.ajax({
+        url: "{% url 'input_cart' %}",
+        method: "POST",
+        data: data,
+        success: function () {
+          $("#cart_body").load(window.location.href + " #cart_body");
+          // $("#cart_totals").load(window.location.href + " #cart_totals"); //for reloading  certain div
+        }
+      })
+    }
+
+    function removeProduct(product_id) {
+      console.log(product_id)
+      var data = { 'product_id': product_id }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "{% url 'removeProduct' %}",
+            method: "GET",
+            data: data,
+            success: function () {
+              console.log("success")
+              $("#cart_body").load(window.location.href + " #cart_body"); //for reloading  certain div
+              $("#cart_count").load(window.location.href + " #cart_count");
+              Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+            }
+          })
+        }
+      })
+
+
+
+
+    }
+
+  </script>
+  {% endblock %}

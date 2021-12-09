@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<!-- Plugins CSS File -->
+
+<!-- Main CSS File -->
+<link rel="stylesheet" href="{% static 'userAssets/assets/css/style.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'userAssets/assets/vendor/fontawesome-free/css/all.min.css' %}">
+</head>
+
+<body>
+  <div class="page-wrapper">
+
+
+
+    <main class="main">
+      <!-- <div class="category-banner-container bg-gray">
+                <div class="category-banner banner text-uppercase"
+                    style="background: no-repeat 60%/cover url('{% static 'userAssets/assets/images/banners/banner-top.jpg' %}');">
+                    <div class="container position-relative">
+                        <div class="row">
+                            <div class="pl-lg-5 pb-5 pb-md-0 col-sm-5 col-xl-4 col-lg-4 offset-1">
+                                <h3>Electronic<br>Deals</h3>
+                                <a href="category.html" class="btn btn-dark">Get Yours!</a>
+                            </div>
+                            <div class="pl-lg-3 col-sm-4 offset-sm-0 offset-1 pt-3">
+                                <div class="coupon-sale-content">
+                                    <h4 class="m-b-1 coupon-sale-text bg-white text-transform-none">Exclusive COUPON
+                                    </h4>
+                                    <h5 class="mb-2 coupon-sale-text d-block ls-10 p-0"><i class="ls-0">UP TO</i><b
+                                            class="text-dark">$100</b> OFF</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+      <div class="container">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="demo4.html"><i class="icon-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="#">Men</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Accessories</li>
+          </ol>
+        </nav>
+
+        <div class="row">
+          <div class="col-lg-9 main-content">
+            <nav class="toolbox sticky-header" data-sticky-options="{'mobile': true}">
+              <div class="toolbox-left">
+                <a href="#" class="sidebar-toggle">
+                  <svg data-name="Layer 3" id="Layer_3" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="15" x2="26" y1="9" y2="9" class="cls-1"></line>
+                    <line x1="6" x2="9" y1="9" y2="9" class="cls-1"></line>
+                    <line x1="23" x2="26" y1="16" y2="16" class="cls-1"></line>
+                    <line x1="6" x2="17" y1="16" y2="16" class="cls-1"></line>
+                    <line x1="17" x2="26" y1="23" y2="23" class="cls-1"></line>
+                    <line x1="6" x2="11" y1="23" y2="23" class="cls-1"></line>
+                    <path d="M14.5,8.92A2.6,2.6,0,0,1,12,11.5,2.6,2.6,0,0,1,9.5,8.92a2.5,2.5,0,0,1,5,0Z" class="cls-2">
+                    </path>
+                    <path d="M22.5,15.92a2.5,2.5,0,1,1-5,0,2.5,2.5,0,0,1,5,0Z" class="cls-2"></path>
+                    <path d="M21,16a1,1,0,1,1-2,0,1,1,0,0,1,2,0Z" class="cls-3"></path>
+                    <path d="M16.5,22.92A2.6,2.6,0,0,1,14,25.5a2.6,2.6,0,0,1-2.5-2.58,2.5,2.5,0,0,1,5,0Z" class="cls-2">
+                    </path>
+                  </svg>
+                  <span>Filter</span>
+                </a>
+
+                <div class="toolbox-item toolbox-sort">
+
+
+                  <!-- <div class="select-custom">
+                                        <select name="orderby" class="form-control">
+                                            <option value="menu_order" selected="selected">Default sorting</option>
+                                            <option value="popularity">Sort by popularity</option>
+                                            <option value="rating">Sort by average rating</option>
+                                            <option value="date">Sort by newness</option>
+                                            <option value="price">Sort by price: low to high</option>
+                                            <option value="price-desc">Sort by price: high to low</option>
+                                        </select>
+                                    </div> -->
+                  <!-- End .select-custom -->
+
+
+                </div>
+                <!-- End .toolbox-item -->
+              </div>
+              <!-- End .toolbox-left -->
+
+            </nav>
+            {% if all_products.0.product_name is None %}
+            <h2 class="text-center mt-5">No Item Found</h2>
+            {% endif %}
+            <div class="row">
+              {% for product in all_products %}
+
+              <div class="col-6 col-sm-4">
+                <div class="product-default">
+                  <figure>
+                    <a href="{% url 'productDetails' product.id %}">
+                      <img src="{{product.image.url}}" width="280" height="280" alt="product" />
+                      <img src="{{product.image.url}}" width="280" height="280" alt="product" />
+                    </a>
+                    {% if product.product_offer %}
+                    <div class="label-group">
+                      <div class="product-label label-hot text-capitalize ">{{product.product_offer.offer_name}}</div>
+                      <div class="product-label label-sale">-{{product.product_offer.percentage}}%</div>
+                    </div>
+                    {% endif %}
+                  </figure>
+
+                  <div class="product-details">
+                    <div class="category-wrap">
+                      <div class="category-list">
+                        <a href="#" class="product-category">{{product.category}}</a>
+                      </div>
+                    </div>
+
+                    <h3 class="product-title"> <a
+                        href="{% url 'productDetails' product.id %}">{{product.product_name}}</a>
+                    </h3>
+
+                    <!-- <div class="ratings-container">
+                      <div class="product-ratings">
+                        <span class="ratings" style="width:100%"></span>
+              
+                        <span class="tooltiptext tooltip-top"></span>
+                      </div>
+          
+                    </div> -->
+                    <!-- End .product-container -->
+
+                    <div class="price-box">
+                      <span class="old-price">₹{{product.mrp}}</span>
+                      {% if product.product_offer_price %}
+                      <span class="product-price">₹{{product.product_offer_price}}</span>
+                      {% else %}
+                      <span class="product-price">₹{{product.sale_price}}</span>
+                      {% endif %}
+                    </div>
+                    <!-- End .price-box -->
+                    {% if product.stock != 0 %}
+                    <div class="product-action">
+                      <a onclick="addToWishList('{{product.id}}')" class="btn-icon-wish" title="wishlist"><i
+                          class="icon-heart"></i></a>
+                      <a onclick="addToCart('{{product.id}}')" class="btn-icon btn-add-cart"><i
+                          class="icon-shopping-cart"></i><span>ADD TO
+                          CART</span></a>
+                    </div>
+                    {% else %}
+                    <div>
+                      <p style="color: rgb(248, 66, 66);font-size:large"><strong>Out Of Stock</strong> </p>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  <!-- End .product-details -->
+                </div>
+              </div>
+              <!-- End .col-sm-4 -->
+              {% endfor %}
+            </div>
+
+            <!-- End .row -->
+          </div>
+          <!-- End .col-lg-9 -->
+
+          <div class="sidebar-overlay"></div>
+          <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
+            <div class="sidebar-wrapper">
+              <div class="widget">
+                <h3 class="widget-title">
+                  <a data-toggle="collapse" href="#widget-body-2" role="button" aria-expanded="true"
+                    aria-controls="widget-body-2">Categories</a>
+                </h3>
+
+                <div class="collapse show" id="widget-body-2">
+                  <div class="widget-body">
+                    <ul class="cat-list">
+                      {% for parent_category in parent_categories %}
+                      <li>
+                        <a data-toggle="collapse" role="button" aria-expanded="true" aria-controls="widget-category-1">
+                          <strong style="color: black;">{{parent_category.category_name}}</strong>
+                        </a>
+                        <div class="collapse show" id="widget-category-1">
+                          <ul class="cat-sublist">
+                            {% for sub_category in sub_categories %}
+                            {% if sub_category.category_id.category_name == parent_category.category_name %}
+                            <li><a href="{{sub_category.get_url}}">{{sub_category.category_name}}</a></li>
+                            {% endif %}
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <!-- End .widget-body -->
+                </div>
+                <!-- End .collapse -->
+              </div>
+              <!-- End .widget -->
+
+              <div class="widget">
+                <div class="collapse show" id="widget-body-3">
+
+                </div>
+              </div>
+
+
+              <!-- <div class="widget widget-size">
+                <h3 class="widget-title">
+                  <a data-toggle="collapse" href="#widget-body-5" role="button" aria-expanded="true"
+                    aria-controls="widget-body-5">Sizes</a>
+                </h3>
+
+                <div class="collapse show" id="widget-body-5">
+                  <div class="widget-body pb-0">
+                    <ul class="config-size-list">
+                      <li class="active"><a href="#">XL</a></li>
+                      <li><a href="#">L</a></li>
+                      <li><a href="#">M</a></li>
+                      <li><a href="#">S</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div> -->
+
+            </div>
+          </aside>
+
+        </div>
+
+      </div>
+      <div class="mb-4"></div>
+
+    </main>
+
+
+  </div>
+
+
+  <!-- Plugins JS File -->
+  <script src="{% static 'userAssets/assets/js/nouislider.min.js' %}"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- End .page-wrapper -->
+  <script>
+    function addToCart(product_id) {
+      console.log(product_id)
+      var data = { 'product_id': product_id }
+
+      $.ajax({
+        url: "{% url 'add_cart'%}",
+        method: "GET",
+        data: data,
+        success: function () {
+          $("#cart_count").load(window.location.href + " #cart_count");
+          Toastify({
+
+            text: "Item added to cart",
+            duration: 3000,
+            style: {
+              background: "linear-gradient(to right, #ff512f , #dd2449)",
+            }
+
+          }).showToast();
+        }
+      })
+
+    }
+
+
+
+  </script>
+
+  <script>
+    function addToWishList(product_id) {
+      console.log(product_id)
+      var data = { 'product_id': product_id }
+
+      $.ajax({
+        url: "{% url 'add_wishlist'%}",
+        method: "GET",
+        data: data,
+        success: function () {
+          console.log("ajax success")
+        }
+      })
+
+    }
+
+
+
+  </script>
+
+  {% endblock %}

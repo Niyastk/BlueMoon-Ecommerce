@@ -1,0 +1,163 @@
+{% load static %}
+<header class="header">
+  <div class="header-top">
+    <div class="container">
+      <div class="header-left d-none d-sm-block">
+        <p class="top-message text-uppercase">FREE Returns. Standard Shipping Orders $99+</p>
+      </div>
+      <!-- End .header-left -->
+
+      <div class="header-right header-dropdowns ml-0 ml-sm-auto w-sm-100">
+        <div class="header-dropdown dropdown-expanded d-none d-lg-block">
+          <a href="#">Links</a>
+          <div class="header-menu">
+            <ul>
+              <!-- <li><a href="dashboard.html">My Account</a></li> -->
+              <!-- <li><a href="about.html">About Us</a></li> -->
+              <!-- <li><a href="#">My Wishlist</a></li> -->
+
+              {% if user.id is None %}
+              <li>Hello guest!</li>
+              <li><a href="{% url 'signUp' %}">Log In</a></li>
+              {% else %}
+              <li class="mr-3">Hello {{user.first_name}}!</li>
+              |<li class="ml-3 mr-3">Wallet Money : Rs.{{user.wallet}}</li>|
+              <li class="ml-3 mr-3">Referral Code : {{user.referral_code}}</li>|
+              <li><a href="{% url 'signOut' %}">Log Out</a></li>
+              {% endif %}
+
+            </ul>
+          </div>
+          <!-- End .header-menu -->
+        </div>
+        <!-- End .header-dropown -->
+      </div>
+      <!-- End .header-right -->
+    </div>
+    <!-- End .container -->
+  </div>
+  <!-- End .header-top -->
+
+  <div class="header-middle sticky-header" data-sticky-options="{'mobile': true}">
+    <div class="container">
+      <div class="header-left col-lg-2 w-auto pl-0">
+        <button class="mobile-menu-toggler text-primary mr-2" type="button">
+          <i class="fas fa-bars"></i>
+        </button>
+        <a href="{% url 'home' %}" class="logo">
+          <img src="{% static 'userAssets/assets/images/logo.png' %}" width="111" height="44" alt="Porto Logo">
+        </a>
+      </div>
+      <!-- End .header-left -->
+
+      <div class="header-right w-lg-max">
+        <div class="header-icon header-search header-search-inline header-search-category w-lg-max text-right mt-0">
+          <a href="#" class="search-toggle" role="button"><i class="icon-search-3"></i></a>
+          <form action="{% url 'search' %}" method="get">
+            <div class="header-search-wrapper">
+              <input type="search" class="form-control" name="search_keyword" id="q" placeholder="Search..." required>
+
+              <!-- End .select-custom -->
+              <button class="btn icon-magnifier p-0" title="search" type="submit"></button>
+            </div>
+            <!-- End .header-search-wrapper -->
+          </form>
+        </div>
+        <!-- End .header-search -->
+
+        <div class="header-contact d-none d-lg-flex pl-4 pr-4">
+          <img alt="phone" src="{% static 'userAssets/assets/images/phone.png' %}" width="30" height="30" class="pb-1">
+          <h6><span>Call us now</span><a class="text-dark font1">+91 9562127608</a></h6>
+        </div>
+        {% if user.id is None %}
+        <a href="{% url 'signUp' %}" class="header-icon" title="login"><i class="icon-user-2"></i></a>
+        {% else %}
+        <a href="{% url 'userDashboard' %}" class="header-icon" title="login"><i class="icon-user-2"></i></a>
+        {% endif %}
+
+        <a href="{% url 'wishlist' %}" class="header-icon" title="wishlist"><i class="icon-wishlist-2"></i></a>
+
+        <div class="dropdown cart-dropdown">
+          <a href="{% url 'cart' %}" title="Cart" class="" role="button">
+            <i class="minicart-icon"></i>
+            <span id="cart_count" class="cart-count badge-circle">{{cart_count}}</span>
+          </a>
+
+          <div class="cart-overlay"></div>
+
+
+          <!-- End .dropdown-menu -->
+        </div>
+        <!-- End .dropdown -->
+      </div>
+      <!-- End .header-right -->
+    </div>
+    <!-- End .container -->
+  </div>
+  <!-- End .header-middle -->
+
+  <div class="header-bottom sticky-header d-none d-lg-block" data-sticky-options="{'mobile': false}">
+    <div class="container">
+      <nav class="main-nav w-100">
+        <ul class="menu">
+          <li class="active">
+            <a href="{% url 'home' %}">Home</a>
+          </li>
+          <li>
+            <a href="#">Categories</a>
+            <div class="megamenu megamenu-fixed-width megamenu-3cols">
+              <div class="row">
+                {% for parent_category in parent_categories%}
+                <div class="col-lg-4">
+                  <a href="#" class="nolink">{{parent_category.category_name}}</a>
+                  <ul class="submenu">
+                    {% for sub_category in sub_categories%}
+                    {% if sub_category.category_id.category_name == parent_category.category_name %}
+                    <li><a href="{{sub_category.get_url}}">{{sub_category.category_name}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% endfor %}
+                <!-- <div class="col-lg-4">
+                  <a href="#" class="nolink">WOMEN</a>
+                  <ul class="submenu">
+                    <li><a href="category-list.html">List Types</a></li>
+                    <li><a href="category-infinite-scroll.html">Ajax Infinite Scroll</a>
+                    </li>
+                    <li><a href="category.html">3 Columns Products</a></li>
+                    <li><a href="category-4col.html">4 Columns Products</a></li>
+                    <li><a href="category-5col.html">5 Columns Products</a></li>
+                    <li><a href="category-6col.html">6 Columns Products</a></li>
+                    <li><a href="category-7col.html">7 Columns Products</a></li>
+                    <li><a href="category-8col.html">8 Columns Products</a></li>
+                  </ul>
+                </div> -->
+                <!-- <div class="col-lg-4 p-0">
+                  <div class="menu-banner">
+                    <figure>
+                      <img src="{% static 'userAssets/assets/images/menu-banner.jpg' %}" width="192" height="313"
+                        alt="Menu banner">
+                    </figure>
+                    <div class="banner-content">
+                      <h4>
+                        <span class="">UP TO</span><br />
+                        <b class="">50%</b>
+                        <i>OFF</i>
+                      </h4>
+                      <a href="category.html" class="btn btn-sm btn-dark">SHOP NOW</a>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+            <!-- End .megamenu -->
+          </li>
+          <li><a href="{% url 'listProductsPage' %}">Products</a></li>
+        </ul>
+      </nav>
+    </div>
+    <!-- End .container -->
+  </div>
+  <!-- End .header-bottom -->
+</header>

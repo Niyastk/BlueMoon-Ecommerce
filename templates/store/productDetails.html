@@ -1,0 +1,514 @@
+{%extends 'base.html'%}
+{% load static %}
+{% block content %}
+
+<body>
+  <div class="page-wrapper">
+    <main class="main">
+      <div class="container">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#"><i class="icon-home"></i></a></li>
+            <li class="breadcrumb-item"><a href="#">Products</a></li>
+          </ol>
+        </nav>
+
+        <div class="product-single-container product-single-default">
+          <div class="cart-message d-none">
+            <strong class="single-cart-notice">“{{product_details.product_name}}”</strong>
+            <span>has been added to your cart.</span>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-5 col-md-6 product-single-gallery">
+              <div class="product-slider-container">
+                {% if product_details.product_offer %}
+                <div class="label-group">
+                  <div class="product-label label-hot text-capitalize ">{{product_details.product_offer.offer_name}}
+                  </div>
+                  <div class="product-label label-sale">
+                    -{{product_details.product_offer.percentage}}%
+                  </div>
+                </div>
+                {% endif %}
+                <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
+                  <div class="product-item">
+                    <img class="product-single-image" src=" {{ product_details.image.url }} "
+                      data-zoom-image=" {{ product_details.image.url }}" width="468" height="468" alt="product" />
+                  </div>
+
+                  <!-- loop this to do multiple images -->
+
+                  {% for data in product_gallery %}
+                  <div class="product-item">
+                    <img class="product-single-image" src="{{data.image.url}}" data-zoom-image="{{data.image.url}}"
+                      width="468" height="468" alt="product" />
+                  </div>
+                  {% endfor %}
+
+                </div>
+                <!-- End .product-single-carousel -->
+                <span class="prod-full-screen">
+                  <i class="icon-plus"></i>
+                </span>
+              </div>
+
+              <div class="prod-thumbnail ">
+                <div class="owl-dot active">
+                  <img src=" {{ product_details.image.url }} " width="110" height="110" alt="product-thumbnail" />
+                </div>
+
+                <!-- loop this to do multiple images -->
+                {% for data in product_gallery %}
+                <div class="owl-dot">
+                  <img src="{{ data.image.url }}" width="110" height="110" alt="product-thumbnail" />
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <!-- End .product-single-gallery -->
+
+            <div class="col-lg-7 col-md-6 product-single-details">
+              <h1 class="product-title">{{product_details.product_name}}</h1>
+              <div class="ratings-container">
+                <div class="product-ratings">
+                  <span class="ratings" style="width:60%"></span>
+                  <!-- End .ratings -->
+                  <span class="tooltiptext tooltip-top"></span>
+                </div>
+                <!-- End .product-ratings -->
+              </div>
+              <!-- End .ratings-container -->
+
+              <hr class="short-divider">
+
+              <div class="price-box">
+                <span class="old-price">₹{{ product_details.mrp }}</span>
+                {% if product_details.product_offer %}
+                <span class="new-price">₹{{ product_details.product_offer_price}}</span>
+                {% else %}
+                <span class="new-price">₹{{ product_details.sale_price }}</span>
+                {% endif %}
+              </div>
+              <!-- End .price-box -->
+
+              <div class="product-desc">
+                <p>{{ product_details.description }}</p>
+              </div>
+              <!-- End .product-desc -->
+
+              <ul class="single-info-list">
+
+                <li>
+                  CATEGORY: <strong><a href="#"
+                      class="product-category">{{product_details.category.category_id.category_name}} /
+                      {{product_details.category}} </a></strong>
+                </li>
+              </ul>
+              <select onchange class="form-control" style="width:65px;height:30px;" name="product_variations"
+                id="product_variations">
+                {% if product_details.size_s %}
+                <option value="size_s">S</option>
+                {% endif %}
+                {% if product_details.size_m %}
+                <option value="size_m">M</option>
+                {% endif %}
+                {% if product_details.size_l %}
+                <option value="size_l">L</option>
+                {% endif %}
+                {% if product_details.size_xl %}
+                <option value="size_xl">XL</option>
+                {% endif %}
+              </select>
+              <div class="product-action">
+                <!-- <div class="product-single-qty">
+                  <input class="horizontal-quantity form-control" type="text">
+                </div> -->
+                <!-- End .product-single-qty -->
+                {% if product_details.stock != 0 %}
+                <a type="submit" style="color:white" onclick="addToCart('{{product_details.id}}')"
+                  class="btn btn-dark mr-2" title="Add to Cart">Add to
+                  Cart</a>
+
+                <!-- buy now button -->
+                <a href="{% url 'checkout' product_details.id %}" style="color:white" class="btn btn-warning mr-2"
+                  title="Add to Cart">Buy Now</a>
+                {% else %}
+                <div>
+                  <p style="color: rgb(248, 66, 66);font-size:large"><strong>Out Of Stock</strong> </p>
+                </div>
+                {% endif %}
+                <a href="#" class="btn btn-gray view-cart d-none">View cart</a>
+              </div>
+              <!-- End .product-action -->
+
+              <hr class="divider mb-0 mt-0">
+
+              <div class="product-single-share mb-3">
+                <label class="sr-only">Share:</label>
+                <!-- End .social-icons -->
+
+                <a onclick="addToWishList('{{product_details.id}}')" class="btn-icon-wish add-wishlist"
+                  title="Add to Wishlist"><i class="icon-wishlist-2"></i><span>Add to
+                    Wishlist</span></a>
+              </div>
+              <!-- End .product single-share -->
+            </div>
+            <!-- End .product-single-details -->
+          </div>
+          <!-- End .row -->
+        </div>
+        <!-- End .product-single-container -->
+
+        <div class="product-single-tabs">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="product-tab-desc" data-toggle="tab" href="#product-desc-content" role="tab"
+                aria-controls="product-desc-content" aria-selected="true">Description</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" id="product-tab-size" data-toggle="tab" href="#product-size-content" role="tab"
+                aria-controls="product-size-content" aria-selected="true">Size Guide</a>
+            </li>
+
+            <!-- <li class="nav-item">
+              <a class="nav-link" id="product-tab-tags" data-toggle="tab" href="#product-tags-content" role="tab"
+                aria-controls="product-tags-content" aria-selected="false">Additional
+                Information</a>
+            </li> -->
+          </ul>
+
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="product-desc-content" role="tabpanel"
+              aria-labelledby="product-tab-desc">
+              <div class="product-desc-content">
+                <p>{{product_details.description}}</p>
+              </div>
+              <!-- End .product-desc-content -->
+            </div>
+            <!-- End .tab-pane -->
+
+            <div class="tab-pane fade" id="product-size-content" role="tabpanel" aria-labelledby="product-tab-size">
+              <div class="product-size-content">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src=" {% static 'userAssets/assets/images/products/single/body-shape.png' %}" alt="body shape"
+                      width="217" height="398">
+                  </div>
+                  <!-- End .col-md-4 -->
+
+                  <div class="col-md-8">
+                    <table class="table table-size">
+                      <thead>
+                        <tr>
+                          <th>SIZE</th>
+                          <th>CHEST(in.)</th>
+                          <th>WAIST(in.)</th>
+                          <th>HIPS(in.)</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>XS</td>
+                          <td>34-36</td>
+                          <td>27-29</td>
+                          <td>34.5-36.5</td>
+                        </tr>
+                        <tr>
+                          <td>S</td>
+                          <td>36-38</td>
+                          <td>29-31</td>
+                          <td>36.5-38.5</td>
+                        </tr>
+                        <tr>
+                          <td>M</td>
+                          <td>38-40</td>
+                          <td>31-33</td>
+                          <td>38.5-40.5</td>
+                        </tr>
+                        <tr>
+                          <td>L</td>
+                          <td>40-42</td>
+                          <td>33-36</td>
+                          <td>40.5-43.5</td>
+                        </tr>
+                        <tr>
+                          <td>XL</td>
+                          <td>42-45</td>
+                          <td>36-40</td>
+                          <td>43.5-47.5</td>
+                        </tr>
+                        <tr>
+                          <td>XXL</td>
+                          <td>45-48</td>
+                          <td>40-44</td>
+                          <td>47.5-51.5</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- End .row -->
+              </div>
+              <!-- End .product-size-content -->
+            </div>
+            <!-- End .tab-pane -->
+
+            <!-- <div class="tab-pane fade" id="product-tags-content" role="tabpanel" aria-labelledby="product-tab-tags">
+              <table class="table table-striped mt-2">
+                <tbody>
+                  <tr>
+                    <th>Weight</th>
+                    <td>23 kg</td>
+                  </tr>
+
+                  <tr>
+                    <th>Dimensions</th>
+                    <td>12 × 24 × 35 cm</td>
+                  </tr>
+
+                  <tr>
+                    <th>Color</th>
+                    <td>Black, Green, Indigo</td>
+                  </tr>
+
+                  <tr>
+                    <th>Size</th>
+                    <td>Large, Medium, Small</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div> -->
+            <!-- End .tab-pane -->
+
+            <div class="tab-pane fade" id="product-reviews-content" role="tabpanel"
+              aria-labelledby="product-tab-reviews">
+              <div class="product-reviews-content">
+                <h3 class="reviews-title">1 Review for {{product_details.product_name}}</h3>
+
+                <div class="comment-list">
+                  <div class="comments">
+                    <figure class="img-thumbnail">
+                      <img src=" {% static 'userAssets/assets/images/blog/author.jpg' %}" alt="author" width="80"
+                        height="80">
+                    </figure>
+
+                    <div class="comment-block">
+                      <div class="comment-header">
+                        <div class="comment-arrow"></div>
+
+                        <div class="ratings-container float-sm-right">
+                          <div class="product-ratings">
+                            <span class="ratings" style="width:60%"></span>
+                            <!-- End .ratings -->
+                            <span class="tooltiptext tooltip-top"></span>
+                          </div>
+                          <!-- End .product-ratings -->
+                        </div>
+
+                        <span class="comment-by">
+                          <strong>Joe Doe</strong> – April 12, 2018
+                        </span>
+                      </div>
+
+                      <div class="comment-content">
+                        <p>Excellent.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="add-product-review">
+                  <h3 class="review-title">Add a review</h3>
+
+                  <form action="#" class="comment-form m-0">
+                    <div class="rating-form">
+                      <label for="rating">Your rating <span class="required">*</span></label>
+                      <span class="rating-stars">
+                        <a class="star-1" href="#">1</a>
+                        <a class="star-2" href="#">2</a>
+                        <a class="star-3" href="#">3</a>
+                        <a class="star-4" href="#">4</a>
+                        <a class="star-5" href="#">5</a>
+                      </span>
+
+                      <select name="rating" id="rating" required="" style="display: none;">
+                        <option value="">Rate…</option>
+                        <option value="5">Perfect</option>
+                        <option value="4">Good</option>
+                        <option value="3">Average</option>
+                        <option value="2">Not that bad</option>
+                        <option value="1">Very poor</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Your review <span class="required">*</span></label>
+                      <textarea cols="5" rows="6" class="form-control form-control-sm"></textarea>
+                    </div>
+                    <!-- End .form-group -->
+
+
+                    <div class="row">
+                      <div class="col-md-6 col-xl-12">
+                        <div class="form-group">
+                          <label>Name <span class="required">*</span></label>
+                          <input type="text" class="form-control form-control-sm" required>
+                        </div>
+                        <!-- End .form-group -->
+                      </div>
+
+                      <div class="col-md-6 col-xl-12">
+                        <div class="form-group">
+                          <label>Email <span class="required">*</span></label>
+                          <input type="text" class="form-control form-control-sm" required>
+                        </div>
+                        <!-- End .form-group -->
+                      </div>
+
+                      <div class="col-md-12">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="save-name" />
+                          <label class="custom-control-label mb-0" for="save-name">Save my
+                            name, email, and website in this browser for the next time I
+                            comment.</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                  </form>
+                </div>
+                <!-- End .add-product-review -->
+              </div>
+              <!-- End .product-reviews-content -->
+            </div>
+            <!-- End .tab-pane -->
+          </div>
+          <!-- End .tab-content -->
+        </div>
+        <!-- End .product-single-tabs -->
+
+        <div class="products-section pt-0">
+          <h2 class="section-title">Related Products</h2>
+
+          <div class="products-slider owl-carousel owl-theme dots-top dots-small">
+
+            {% for product in all_products|slice:":4" %}
+            <div class="product-default">
+              <figure>
+                <a href="{% url 'productDetails' product.id %}">
+                  <img src="{{product.image.url}}" width="280" height="280" alt="product">
+                  <img src="{{product.image.url}}" width="280" height="280" alt="product">
+                </a>
+                <!-- <div class="label-group">
+                  <div class="product-label label-hot">HOT</div>
+                  <div class="product-label label-sale">-20%</div>
+                </div> -->
+              </figure>
+              <div class="product-details">
+                <div class="category-list">
+                  <a href="#" class="product-category">{{product.category}}</a>
+                </div>
+                <h3 class="product-title">
+                  <a href="{% url 'productDetails' product.id %}">{{product.product_name}}</a>
+                </h3>
+                <div class="ratings-container">
+                  <div class="product-ratings">
+                    <span class="ratings" style="width:80%"></span>
+                    <!-- End .ratings -->
+                    <span class="tooltiptext tooltip-top"></span>
+                  </div>
+                  <!-- End .product-ratings -->
+                </div>
+                <!-- End .product-container -->
+                <div class="price-box">
+                  <del class="old-price">₹{{product.mrp}}</del>
+                  {% if product.product_offer %}
+                  <span class="product-price">₹{{product.product_offer_price}}</span>
+                  {% else %}
+                  <span class="product-price">₹{{product.sale_price}}</span>
+                  {% endif %}
+                </div>
+                <!-- End .price-box -->
+                <div class="product-action">
+                  <a onclick="addToWishList('{{product.id}}')" title="Wishlist" class="btn-icon-wish"><i
+                      class="icon-heart"></i></a>
+
+                  {% if product.stock != 0 %}
+                  <a onclick="addToCart('{{product.id}}')" class="btn-icon btn-add-cart"><i
+                      class="fa fa-arrow-right"></i><span>ADD TO
+                      CART</span></a>
+                  {% else %}
+                  <div>
+                    <p style="color: rgb(248, 66, 66);font-size:large"><strong>Out Of Stock</strong> </p>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+              <!-- End .product-details -->
+            </div>
+            {% endfor %}
+          </div>
+          <!-- End .products-slider -->
+        </div>
+        <!-- End .products-section -->
+        <!-- End .row -->
+      </div>
+      <!-- End .container -->
+    </main>
+    <!-- End .main -->
+  </div>
+  <!-- End .page-wrapper -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function addToCart(product_id) {
+      var product_variations = document.getElementById('product_variations').value
+      console.log(product_variations)
+      var data = { 'product_id': product_id, 'product_variations': product_variations }
+
+      $.ajax({
+        url: "{% url 'add_cart'%}",
+        method: "GET",
+        data: data,
+        success: function () {
+          $("#cart_count").load(window.location.href + " #cart_count");
+          Toastify({
+
+            text: "Item added to cart",
+            duration: 3000,
+            style: {
+              background: "linear-gradient(to right, #ff512f , #dd2449)",
+            }
+
+          }).showToast();
+        }
+      })
+
+    }
+
+  </script>
+
+  <script>
+    function addToWishList(product_id) {
+      console.log(product_id)
+      var data = { 'product_id': product_id }
+
+      $.ajax({
+        url: "{% url 'add_wishlist'%}",
+        method: "GET",
+        data: data,
+        success: function () {
+          console.log("ajax success")
+        }
+      })
+
+    }
+
+
+
+  </script>
+  {% endblock %}

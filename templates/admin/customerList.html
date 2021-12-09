@@ -1,0 +1,107 @@
+{% extends 'admin/adminBase.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Body: Body -->
+<div class="body d-flex py-lg-3 py-md-2">
+  <div class="container-xxl">
+    <div class="row align-items-center">
+      <div class="border-0 mb-4">
+        <div
+          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+          <h3 class="fw-bold mb-0">Customers Information</h3>
+        </div>
+      </div>
+    </div> <!-- Row end  -->
+    <div class="row clearfix g-3">
+      <div class="col-sm-12">
+        <div class="card mb-3">
+          <div class="card-body">
+            <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Username</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Active Statusr</th>
+                  <th>Block/Unblock</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for data in data %}
+                {% if data.is_superadmin %}
+                <P></P>
+                {% else %}
+                <tr>
+                  <td><strong>#{{ data.id }}</td>
+                  <td>
+                    <a href="customer-detail.html">
+                      <img class="avatar rounded" src="{% static 'adminAssets/assets/images/xs/avatar1.svg' %}" alt="">
+                      <span class="fw-bold ms-1">{{ data.first_name }}</span>
+                    </a>
+                  </td>
+                  <td>{{ data.last_name }}</td>
+                  <td>{{ data.username }}</td>
+                  <td>{{ data.phone_number }}</td>
+                  <td>{{ data.email }}</td>
+                  {% if data.is_active %}
+                  <td><i style="color:green;font-weight:bold">Active</i></td>
+                  {% else %}
+                  <td><i style="color:red;font-weight:bold">Inactive</i></td>
+                  {% endif %}
+                  <td>
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                      <a href="{% url 'activeStatus' data.id %}"><button type="button" class="btn btn-outline-secondary"
+                          data-bs-toggle="modal" data-bs-target="#expedit"><i
+                            class="icofont-edit text-success"></i></button></a>
+                    </div>
+                  </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- Row End -->
+  </div>
+</div>
+{% block additions %}
+
+{% endblock %}
+<!-- Jquery Core Js -->
+<script src="{% static 'adminAssets/assets/bundles/libscripts.bundle.js' %}"></script>
+
+<!-- Plugin Js-->
+<script src="{% static 'adminAssets/assets/bundles/dataTables.bundle.js' %}"></script>
+
+<!-- Jquery Page Js -->
+<script src="{% static 'adminAssets//js/template.js' %}"></script>
+<script>
+  // project data table
+  $(document).ready(function () {
+    $('#myProjectTable')
+      .addClass('nowrap')
+      .dataTable({
+        responsive: true,
+        columnDefs: [
+          { targets: [-1, -3], className: 'dt-body-right' }
+        ]
+      });
+    $('.deleterow').on('click', function () {
+      var tablename = $(this).closest('table').DataTable();
+      tablename
+        .row($(this)
+          .parents('tr'))
+        .remove()
+        .draw();
+
+    });
+  });
+</script>
+{% endblock%}

@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+{% block content %}
+<main class="main">
+	<div class="page-header">
+		<div class="container d-flex flex-column align-items-center">
+			<nav aria-label="breadcrumb" class="breadcrumb-nav">
+				<div class="container">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="demo4.html">Home</a></li>
+						<li class="breadcrumb-item"><a href="category.html">Shop</a></li>
+						<li class="breadcrumb-item active" aria-current="page">
+							My Account
+						</li>
+					</ol>
+				</div>
+			</nav>
+
+			<h1>My Account</h1>
+		</div>
+	</div>
+
+	<div class="container login-container">
+		<div class="row">
+			<div class="col-lg-10 mx-auto">
+				<div class="row">
+					<div class="col-md-6 pt-5">
+						<div class="heading mb-1">
+							<h2 class="title">Login</h2>
+						</div>
+
+						<form action="{% url 'signIn' %}" method="POST">
+							{% csrf_token %}
+							<label for="login-email">
+								Username
+							</label>
+							<input type="text" class="form-input form-wide" id="login-email" name="login_username"
+								placeholder="Enter your username" />
+
+							<label for="login-password">
+								Password
+							</label>
+							<input type="password" class="form-input form-wide" id="login-password" name="login_password"
+								placeholder="Enter your password" />
+							{% for message in messages %}
+							{% if "login_error" in message.tags %}
+							<p class="pt-2" style="color: red;font-size:12px;font-style: italic;">{{message}}</p>
+							{% endif %}
+							{% endfor %}
+							<div class="form-footer">
+								<div class="custom-control custom-checkbox mb-0">
+									<label class="custom-control-label mb-0" for="lost-password">Remember
+										me</label>
+								</div>
+								<a href="{% url 'otpLogin' %}" class="forget-password text-dark form-footer-right">Login With OTP</a>
+							</div>
+
+							<button type="submit" class="btn btn-dark btn-md w-100">
+								LOGIN
+							</button>
+						</form>
+					</div>
+
+
+					<div class="col-md-6 pl-lg-5 pt-5 ">
+						<div class="heading mb-1">
+							<h2 class="title">Register</h2>
+						</div>
+
+						<form action="{% url 'signUp' %}" method="POST" onsubmit=" return checkTotal()">
+							{% csrf_token %}
+							<label>
+								First Name
+							</label>
+							{{form.first_name}}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_first_name"> </p>
+							<label>
+								Last Name
+
+							</label>
+
+							{{form.last_name}}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_last_name"></p>
+
+							<label>
+								Username
+							</label>
+							{{form.username}}
+							{% for message in messages %}
+							{% if "username_error" in message.tags %}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_username">{{message}}</p>
+							{% endif %}
+							{% endfor %}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_username">{{message}}</p>
+							<label for="register-email">
+								Email address
+							</label>
+							{{form.email}}
+							{% for message in messages %}
+							{% if "email_error" in message.tags %}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_email">{{message}}</p>
+							{% endif %}
+							{% endfor %}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_email">{{message}}</p>
+							<label for="register-email">
+								Phone Number
+							</label>
+							{{form.phone_number}}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_phone_number"> </p>
+							<!-- <label for="register-email">
+								Address
+							</label>
+							{{form.address}} -->
+							<label for="register-password">
+								Password
+							</label>
+							{{form.password}}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_password"> </p>
+
+							<label for="register-password">
+								Confirm Password
+							</label>
+							{{form.confirm_password}}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_confirm_password"> </p>
+
+							<label style="color:rgb(83, 80, 80)" for="register-password">
+								Referral Code (if any)
+							</label>
+							{{form.referral_code}}
+							{% for message in messages %}
+							{% if "referral_error" in message.tags %}
+							<p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_referral_code">{{message}}
+							</p>
+							{% endif %}
+							{% endfor %}
+
+							<div class="form-footer mb-2">
+								<button type="submit" class="btn btn-dark btn-md w-100 mr-0">
+									Register
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main><!-- End .main -->
+
+</div><!-- End .page-wrapper -->
+</body>
+<script>
+
+	function check_first_name() {
+		console.log("hey world")
+		var first_name = document.getElementById('id_first_name').value;
+		if (first_name == "") {
+			document.getElementById('user_first_name').style.display = "block";
+			document.getElementById('user_first_name').innerHTML = "Please enter your first name";
+			return false;
+		} else if (first_name.length < 2) {
+			document.getElementById('user_first_name').style.display = "block";
+			document.getElementById('user_first_name').innerHTML = "first name should contain minimum of 3 characters";
+			return false;
+		} else {
+			document.getElementById('user_first_name').style.display = "none";
+			return true;
+		}
+
+
+	}
+	function check_last_name() {
+		var last_name = document.getElementById('id_last_name').value;
+		if (last_name == "") {
+			document.getElementById('user_last_name').style.display = "block";
+			document.getElementById('user_last_name').innerHTML = "Please enter your last name";
+			return false;
+		} else if (last_name.length < 2) {
+			document.getElementById('user_last_name').style.display = "block";
+			document.getElementById('user_last_name').innerHTML = "last name should contain minimum of 3 characters";
+			return false;
+		} else {
+			document.getElementById('user_last_name').style.display = "none";
+			return true;
+		}
+
+
+	}
+	function check_username() {
+		var username = document.getElementById('id_username').value;
+		if (username == "") {
+			document.getElementById('user_username').style.display = "block";
+			document.getElementById('user_username').innerHTML = "Please enter a username";
+			return false;
+		} else if (username.length < 2) {
+			document.getElementById('user_username').style.display = "block";
+			document.getElementById('user_username').innerHTML = "username should contain minimum of 3 characters";
+			return false;
+		} else {
+			document.getElementById('user_username').style.display = "none";
+			return true;
+		}
+
+
+	}
+	function check_email() {
+		var email = document.getElementById('id_email').value;
+		var pattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+		if (email.match(pattern)) {
+			document.getElementById('user_email').style.display = "none";
+			return true;
+		} else {
+
+			document.getElementById('user_email').style.display = "block";
+			document.getElementById('user_email').innerHTML = "Please enter a valid email";
+			return false;
+		}
+
+	}
+
+	function check_phone_number() {
+		var phone_number = document.getElementById('id_phone_number').value;
+		if (phone_number == "") {
+			document.getElementById('user_phone_number').style.display = "block";
+			document.getElementById('user_phone_number').innerHTML = "Please enter your phone number";
+			return false;
+		} else if (isNaN(phone_number)) {
+			document.getElementById('user_phone_number').style.display = "block";
+			document.getElementById('user_phone_number').innerHTML = "Enter a valid phone number";
+			return false;
+		} else if (phone_number.length < 9) {
+			document.getElementById('user_phone_number').style.display = "block";
+			document.getElementById('user_phone_number').innerHTML = "phone number should contain minimum of 10 digits";
+			return false;
+		} else {
+			document.getElementById('user_phone_number').style.display = "none";
+			return true;
+		}
+
+
+	}
+
+	function check_password() {
+		var password = document.getElementById('id_password').value;
+		if (password == "") {
+			document.getElementById('user_password').style.display = "block";
+			document.getElementById('user_password').innerHTML = "Please enter your password";
+			return false;
+		} else if (password.length < 4) {
+			document.getElementById('user_password').style.display = "block";
+			document.getElementById('user_password').innerHTML = "password should contain minimum of 5 characters";
+			return false;
+		} else {
+			document.getElementById('user_password').style.display = "none";
+			return true;
+		}
+
+
+	}
+	function check_confirm_password() {
+		var password_confirm = document.getElementById('id_confirm_password').value;
+		var password = document.getElementById('id_password').value;
+		if (password_confirm == "") {
+			document.getElementById('user_confirm_password').style.display = "block";
+			document.getElementById('user_confirm_password').innerHTML = "Please enter your password";
+			return false;
+		} else if (password_confirm.length < 4) {
+			document.getElementById('user_confirm_password').style.display = "block";
+			document.getElementById('user_confirm_password').innerHTML = "password should contain minimum of 5 characters";
+			return false;
+		} else if (password_confirm != password) {
+			document.getElementById('user_confirm_password').style.display = "block";
+			document.getElementById('user_confirm_password').innerHTML = "Password doesn't match";
+			return false;
+		} else {
+			document.getElementById('user_confirm_password').style.display = "none";
+			return true;
+		}
+
+
+	}
+
+	function checkTotal() {
+
+		check_first_name = check_first_name();
+		check_last_name = check_last_name();
+		check_username = check_username();
+		check_email = check_email();
+		check_phone_number = check_phone_number();
+		check_password = check_password();
+		check_confirm_password = check_confirm_password();
+
+		if (check_first_name == true && check_last_name == true && check_username == true && check_email == true && check_phone_number == true
+			&& check_password == true && check_confirm_password == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+</script>
+
+</html>
+{% endblock %}

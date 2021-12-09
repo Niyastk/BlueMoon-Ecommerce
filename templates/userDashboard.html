@@ -1,0 +1,439 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Plugins CSS File -->
+
+
+<!-- Main CSS File -->
+<link rel="stylesheet" href="{% static 'userAssets/assets/css/style.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'userAssets/assets/vendor/fontawesome-free/css/all.min.css' %}">
+<link rel="stylesheet" type="text/css"
+  href="{% static 'userAssets/assets/vendor/simple-line-icons/css/simple-line-icons.min.css' %}">
+
+
+<body>
+  <div class="page-wrapper">
+    <main id="order_status" class="main">
+      <div class="page-header">
+        <div class="container d-flex flex-column align-items-center">
+          <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  My Account
+                </li>
+              </ol>
+            </div>
+          </nav>
+
+          <h1>My Account</h1>
+        </div>
+      </div>
+
+      <div class="container account-container custom-account-container">
+        <div class="row">
+          <div class="sidebar widget widget-dashboard mb-lg-0 mb-3 col-lg-3 order-0">
+            <h2 class="text-uppercase">My Account</h2>
+            <ul class="nav nav-tabs list flex-column mb-0" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="dashboard-tab" data-toggle="tab" href="#dashboard" role="tab"
+                  aria-controls="dashboard" aria-selected="true">Dashboard</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" id="order-tab" data-toggle="tab" href="#order" role="tab" aria-controls="order"
+                  aria-selected="true">Orders</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" id="address-tab" data-toggle="tab" href="#address" role="tab"
+                  aria-controls="address" aria-selected="false">Addresses</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit"
+                  aria-selected="false">Account
+                  details</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="#">Wishlist</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'signOut' %}">Logout</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-9 order-lg-last order-1 tab-content">
+            <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+              <div class="dashboard-content">
+
+                <div class="mb-4"></div>
+
+                <div class="row row-lg">
+                  <div class="col-6 col-md-4">
+                    <div class="feature-box text-center pb-4">
+                      <a href="#order" class="link-to-tab"><i class="sicon-social-dropbox"></i></a>
+                      <div class="feature-box-content">
+                        <h3>ORDERS</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-md-4">
+                    <div class="feature-box text-center pb-4">
+                      <a href="#address" class="link-to-tab"><i class="sicon-location-pin"></i></a>
+                      <div class="feature-box-content">
+                        <h3>ADDRESSES</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-md-4">
+                    <div class="feature-box text-center pb-4">
+                      <a href="#edit" class="link-to-tab"><i class="icon-user-2"></i></a>
+                      <div class="feature-box-content p-0">
+                        <h3>ACCOUNT DETAILS</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-md-4">
+                    <div class="feature-box text-center pb-4">
+                      <a href="wishlist.html"><i class="sicon-heart"></i></a>
+                      <div class="feature-box-content">
+                        <h3>WISHLIST</h3>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-6 col-md-4">
+                    <div class="feature-box text-center pb-4">
+                      <a href="{% url 'signOut' %}"><i class="sicon-logout"></i></a>
+                      <div class="feature-box-content">
+                        <h3>LOGOUT</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- End .row -->
+              </div>
+            </div><!-- End .tab-pane -->
+
+            <div class="tab-pane fade" id="order" role="tabpanel">
+              <div class="order-content">
+                <h3 class="account-sub-title d-none d-md-block"><i
+                    class="sicon-social-dropbox align-middle mr-3"></i>Orders</h3>
+                <div class="order-table-container text-center">
+                  <table class="table table-order text-left">
+                    <thead>
+                      <tr>
+                        <th class="order-id">Order Number</th>
+                        <th class="order-id">Delivery Address</th>
+                        <th class="order-date">DATE</th>
+                        <th class="order-price">TOTAL</th>
+                        <th class="order-action">PAYMENT METHOD</th>
+                        <th class="order-status">STATUS</th>
+                        <th class="order-action">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- <tr>
+												<td class="text-center p-0" colspan="5">
+													<p class="mb-5 mt-5">
+														No Order has been made yet.
+													</p>
+												</td>
+											</tr> -->
+                      {% for order in orders %}
+                      <tr>
+                        <td><a href="{% url 'userOrderDetails' order.order_number %}">{{order.order_number}}</a></td>
+                        <td>{{order.address}}</td>
+                        <td>{{order.date}}</td>
+                        <td>{{order.total}}</td>
+                        <td>{{order.payment_method}}</td>
+                        <td> <strong>{{order.order_status}}</strong></td>
+                        <td id="order_button">
+                          {% if order.order_status != "Order Completed" %}
+                          <div class="btn-group ps-4 " role="group" aria-label="Basic outlined example">
+                            <a onclick="orderCancel('{{order.order_number}}')" class="btn btn-danger"
+                              style="color:white;">
+                              Cancel
+                            </a>
+                          </div>
+                          {% else %}
+                          <div class="btn-group ps-4 " role="group" aria-label="Basic outlined example">
+                            <a onclick="orderReturn('{{order.order_number}}')" class="btn btn-warning"
+                              style="color:white;">
+                              Return
+                            </a>
+                          </div>
+                          {% endif %}
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  <hr class="mt-0 mb-3 pb-2" />
+
+                  <a href="category.html" class="btn btn-dark">Go Shop</a>
+                </div>
+              </div>
+            </div><!-- End .tab-pane -->
+
+            <div class="tab-pane fade" id="address" role="tabpanel">
+              <h3 class="account-sub-title d-none d-md-block mb-1"><i
+                  class="sicon-location-pin align-middle mr-3"></i>Addresses</h3>
+              <div class="addresses-content">
+                <p class="mb-4">
+                  The following addresses will be used on the checkout page by
+                  default.
+                </p>
+
+                <div class="row">
+
+                  <div class="address col-md-6 mt-5 mt-md-0">
+                    <div class="heading d-flex">
+                      <h4 class="text-dark mb-0">
+                        Address
+                      </h4>
+                    </div>
+
+                    <!-- <div class="address-box">
+                      You have not Entered address yet.
+                    </div> -->
+
+                    <a href="{% url 'add_address' %}" class="btn btn-default address-action link-to-tab mt-3">Add
+                      Address</a>
+                  </div>
+
+                </div>
+                <!-- Addresses -->
+                {% for address in address %}
+
+                <div style="background-color: rgb(232, 242, 250); border-radius: 1rem; " class="mt-3 ">
+                  <!-- edit button -->
+                  <a href="{% url 'editAddress' address.id %}"><img
+                      src="https://img.icons8.com/external-kiranshastry-lineal-color-kiranshastry/25/000000/external-edit-interface-kiranshastry-lineal-color-kiranshastry.png" /></a>
+                  <a onclick="deleteAddress('{{address.id}}')" class="float-right mt-3 mr-2"><img
+                      src="https://img.icons8.com/color/25/000000/delete-forever.png" /></a>
+                  <label class="pl-5 radio " name="address_list" id="address_list" readonly>
+                    <span>{{address.first_name}}</span> <span>{{address.last_name}}</span>,<br>
+                    <span>{{address.street_address}}</span> <br> <span>{{address.apartment}}</span> <br>
+                    <span>{{address.town}}</span>,
+                    <span>{{address.postcode}}</span>,<span>{{address.country}}</span>
+                    <br>
+                    <span>{{address.phone_number}}</span>, <span>{{address.email}}</span>
+                  </label>
+                </div>
+                {% endfor %}
+              </div>
+            </div><!-- End .tab-pane -->
+
+            <div class="tab-pane fade" id="edit" role="tabpanel">
+              <h3 class="account-sub-title d-none d-md-block mt-0 pt-1 ml-1"><i
+                  class="icon-user-2 align-middle mr-3 pr-1"></i>Account Details</h3>
+              <div class="account-content">
+                <form action="{% url 'userDetailsEdit' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="acc-name">First name</label>
+                        <input type="text" class="form-control" value="{{request.user.first_name}}" id="acc-name"
+                          name="acc-name" />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="acc-lastname">Last name</label>
+                        <input type="text" class="form-control" id="acc-lastname" value="{{request.user.last_name}}"
+                          name="acc-lastname" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="acc-email">Email address</label>
+                    <input placeholder="{{request.user.email}}" type="email" class="form-control" id="acc-email"
+                      name="acc-email" />
+                    {% for message in messages %}
+                    {% if "email_taken" in message.tags %}
+                    <p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_email">{{message}}
+                    </p>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                  <div class="form-group mb-4">
+                    <label for="acc-email">Phone Number</label>
+                    <input placeholder="{{request.user.phone_number}}" type="number" class="form-control" id="acc-phone"
+                      name="acc-phone" />
+                    {% for message in messages %}
+                    {% if "phone_number_taken" in message.tags %}
+                    <p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_email">{{message}}
+                    </p>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+
+                  <div class="form-footer mt-3 mb-0">
+                    <button type="submit" class="btn btn-dark mr-0">
+                      Save changes
+                    </button>
+                  </div>
+                </form>
+                <form class="mt-3" action="{% url 'userPasswordChange' %}" method="POST">
+                  {% csrf_token %}
+                  <div class="change-password">
+                    <h3 class="text-uppercase mb-2">Password Change</h3>
+
+                    <div class="form-group">
+                      <label for="acc-password">Current Password (leave blank to leave
+                        unchanged)</label>
+                      <input type="password" class="form-control" id="acc-password" name="current_password" required />
+                    </div>
+                    {% for message in messages %}
+                    {% if "incorrect_password" in message.tags %}
+                    <p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_email">{{message}}
+                    </p>
+                    {% endif %}
+                    {% endfor %}
+
+                    <div class="form-group">
+                      <label for="acc-password">New Password (leave blank to leave
+                        unchanged)</label>
+                      <input type="password" class="form-control" id="acc-new-password" name="acc-new-password"
+                        required />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="acc-repassword">Confirm New Password</label>
+                      <input type="password" class="form-control" id="acc-confirm-password" name="acc-confirm-password"
+                        required />
+                    </div>
+                    {% for message in messages %}
+                    {% if "password_match" in message.tags %}
+                    <p class="pl-2" style="color: red;font-size:12px;font-style: italic;" id="user_email">{{message}}
+                    </p>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                  <div class="form-footer mt-3 mb-0">
+                    <button type="submit" class="btn btn-dark mr-0">
+                      Save changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div><!-- End .tab-pane -->
+
+          </div><!-- End .tab-content -->
+        </div><!-- End .row -->
+      </div><!-- End .container -->
+
+      <div class="mb-5"></div><!-- margin -->
+    </main><!-- End .main -->
+  </div><!-- End .page-wrapper -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function orderCancel(order_number) {
+      console.log(order_number)
+      var data = { 'order_number': order_number }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Cancel it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "{% url 'orderCancel' %}",
+            method: "GET",
+            data: data,
+            success: function () {
+              console.log("success")
+              $("#order_status").load(window.location.href + " #order_status"); //for reloading  certain div
+              Swal.fire(
+                'Canceled!',
+                'Your Order has been Canceled.',
+                'success'
+              )
+            }
+          })
+        }
+      })
+
+
+    }
+    function orderReturn(order_number) {
+      console.log(order_number)
+      var data = { 'order_number': order_number }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Our Employees will pick it for you !",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Return it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "{% url 'orderReturn' %}",
+            method: "GET",
+            data: data,
+            success: function () {
+              console.log("success")
+              $("#order_status").load(window.location.href + " #order_status"); //for reloading  certain div
+              Swal.fire(
+                'Return!',
+                'Your Order has been moved to return process.',
+                'success'
+              )
+            }
+          })
+        }
+      })
+    }
+
+    function deleteAddress(address_id) {
+      console.log(address_id)
+      var data = { 'address_id': address_id }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "{% url 'deleteAddress' %}",
+            method: "GET",
+            data: data,
+            success: function () {
+              console.log("success")
+              $("#order_status").load(window.location.href + " #order_status"); //for reloading  certain div
+              Swal.fire(
+                'Deleted!',
+                'Your Address has been Deleted.',
+                'success'
+              )
+            }
+          })
+        }
+      })
+    }
+
+  </script>
+  {% endblock %}

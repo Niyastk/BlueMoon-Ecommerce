@@ -1,0 +1,224 @@
+{% extends 'admin/adminBase.html' %}
+{% load static %}
+
+{% block content %}
+
+<body>
+  <div id="ebazar-layout" class="theme-blue">
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4">
+
+      <!-- Body: Body -->
+      <div class="body d-flex py-3">
+        <div class="container-xxl">
+          <div class="row align-items-center">
+            <div class="border-0 mb-4">
+              <div
+                class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                {% for order_detail in order_details|slice:":1" %}
+                <h3 class="fw-bold mb-0">Order Details: #{{order_detail.order_number}}</h3>
+                {% endfor %}
+              </div>
+            </div>
+          </div> <!-- Row end  -->
+          <div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
+            <div class="col">
+              <div class="alert-success alert mb-0">
+                <div class="d-flex align-items-center">
+                  <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fa fa-shopping-cart fa-lg"
+                      aria-hidden="true"></i></div>
+                  <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Order Created at</div>
+                    {% for order_detail in order_details|slice:":1" %}
+                    <span class="small">{{order_detail.date}}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="alert-danger alert mb-0">
+                <div class="d-flex align-items-center">
+                  <div class="avatar rounded no-thumbnail bg-danger text-light"><i class="fa fa-user fa-lg"
+                      aria-hidden="true"></i></div>
+                  <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Name</div>
+                    {% for order_detail in order_details|slice:":1" %}
+                    <span class="small">{{order_detail.user.first_name}}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="alert-warning alert mb-0">
+                <div class="d-flex align-items-center">
+                  <div class="avatar rounded no-thumbnail bg-warning text-light"><i class="fa fa-envelope fa-lg"
+                      aria-hidden="true"></i></div>
+                  <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Email</div>
+                    {% for order_detail in order_details|slice:":1" %}
+                    <span class="small">{{order_detail.user.first_name}}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="alert-info alert mb-0">
+                <div class="d-flex align-items-center">
+                  <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fa fa-phone-square fa-lg"
+                      aria-hidden="true"></i></div>
+                  <div class="flex-fill ms-3 text-truncate">
+                    <div class="h6 mb-0">Contact No</div>
+                    {% for order_detail in order_details|slice:":1" %}
+                    <span class="small">{{order_detail.user.phone_number}}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- Row end  -->
+
+          <div class="row g-3 mb-3 row-cols-1 row-cols-md-1 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-3 row-deck">
+            <div class="col">
+              <div class="card auth-detailblock">
+                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                  <h6 class="mb-0 fw-bold ">Delivery Address</h6>
+                  <!-- <a href="#" class="text-muted">Edit</a> -->
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-12">
+                      {% for order_detail in order_details|slice:":1" %}
+                      <span> <i>{{order_detail.address}} </i></span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- Row end  -->
+
+          <div class="row g-3 mb-3">
+            <div class="col-xl-12 col-xxl-8">
+              <div class="card">
+                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                  <h6 class="mb-0 fw-bold ">Order Summary</h6>
+                </div>
+                <div class="card-body">
+                  <div class="product-cart">
+                    <div class="checkout-table table-responsive">
+                      <table id="myCartTable" class="table display dataTable table-hover align-middle"
+                        style="width:100%">
+                        <thead>
+                          <tr>
+                            <th>Product Id</th>
+                            <th class="product">Product Name</th>
+                            <th class="quantity">Quantity</th>
+                            <th class="price">Subtotal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for order_detail in order_details %}
+                          <tr>
+                            <td>
+                              {{order_detail.product.id}}
+                            </td>
+                            <td>
+                              <h6 class="title">{{order_detail.product.product_name}}</h6>
+                            </td>
+                            <td>
+                              x {{order_detail.quantity}}
+                            </td>
+                            <td>
+                              <p class="price">₹{{order_detail.sub_total}}</p>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="checkout-coupon-total checkout-coupon-total-2 d-flex flex-wrap justify-content-end">
+                      <div class="checkout-total">
+                        <div class="single-total total-payable">
+                          <p class="value"><strong>Total Payable:</strong> </p>
+                          {% for order_detail in order_details|slice:":1" %}
+                          <p class="price">₹{{order_detail.total}}</p>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-12 col-xxl-4">
+              <div class="card mb-3">
+                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                  <h6 class="mb-0 fw-bold ">Status Orders</h6>
+                </div>
+                <div class="card-body">
+                  {% for order_detail in order_details|slice:":1" %}
+                  <form action="{% url 'AdminOrderStatus' order_detail.order_number %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row g-3 align-items-center">
+                      <div class="col-md-12">
+                        <label class="form-label">Order ID</label>
+                        {% for order_detail in order_details|slice:":1" %}
+                        <input readonly type="text" class="form-control" value="{{order_detail.order_number}}">
+                        {% endfor %}
+                      </div>
+                      <div class="col-md-12">
+                        <label class="form-label">Order Status</label>
+                        {% for order_detail in order_details|slice:":1" %}
+                        {% if order_detail.order_status == "Order Placed" %}
+                        <select class="form-select" aria-label="Default select example" name="order_status">
+                          <option selected value="order_placed">{{order_detail.order_status}}</option>
+                          <option value="order_shipped">Order Shipped</option>
+                          <option value="order_completed">Order Completed</option>
+                          <option value="order_cancel">Order Cancel</option>
+                          <option value="order_return">Order Return</option>
+                        </select>
+                        {% elif order_detail.order_status == "Order Shipped" %}
+                        <select class="form-select" aria-label="Default select example" name="order_status">
+                          <option selected value="order_shipped">{{order_detail.order_status}}</option>
+                          <option value="order_placed">Order Placed</option>
+                          <option value="order_completed">Order Completed</option>
+                          <option value="order_cancel">Order Cancel</option>
+                          <option value="order_return">Order Return</option>
+                        </select>
+                        {% elif order_detail.order_status == "Order Completed" %}
+                        <select class="form-select" aria-label="Default select example" name="order_status">
+                          <option selected value="order_completed">{{order_detail.order_status}}</option>
+                        </select>
+
+                        {% elif order_detail.order_status == "Order Canceled" %}
+                        <select class="form-select" aria-label="Default select example" name="order_status">
+                          <option selected value="order_cancel">{{order_detail.order_status}}</option>
+                        </select>
+                        {% elif order_detail.order_status == "Order Returned" %}
+                        <select class="form-select" aria-label="Default select example" name="order_status">
+                          <option selected value="order_return">{{order_detail.order_status}}</option>
+                        </select>
+                        {% endif %}
+                        {% endfor %}
+                      </div>
+                      <!-- <div class="col-md-12">
+                                                <label class="form-label">Quantity</label>
+                                                <input type="text" class="form-control" value="4">
+                                            </div> -->
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-4 text-uppercase">Submit</button>
+                  </form>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div> <!-- Row end  -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}

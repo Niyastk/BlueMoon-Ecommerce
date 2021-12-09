@@ -1,0 +1,279 @@
+{% extends 'admin/adminBase.html' %}
+{% load static %}
+
+
+{% block content %}
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+  <div class="container-xxl">
+
+    <div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4">
+      <div class="col">
+        <div class="alert-success alert mb-0">
+          <div class="d-flex align-items-center">
+            <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fa fa-dollar fa-lg"></i>
+            </div>
+            <div class="flex-fill ms-3 text-truncate">
+              <div class="h6 mb-0">Cash on delivery</div>
+              <span class="small">₹{{total_cash_on_delivery}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="alert-danger alert mb-0">
+          <div class="d-flex align-items-center">
+            <div class="avatar rounded no-thumbnail bg-danger text-light"><i class="fa fa-credit-card fa-lg"></i>
+            </div>
+            <div class="flex-fill ms-3 text-truncate">
+              <div class="h6 mb-0">PayPal</div>
+              <span class="small">₹{{total_paypal}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="alert-info alert mb-0">
+          <div class="d-flex align-items-center">
+            <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fa fa-credit-card fa-lg"></i>
+            </div>
+            <div class="flex-fill ms-3 text-truncate">
+              <div class="h6 mb-0">RazorPay</div>
+              <span class="small">₹{{total_razorpay}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col">
+        <div class="alert-warning alert mb-0">
+          <div class="d-flex align-items-center">
+            <div class="avatar rounded no-thumbnail bg-warning text-light"><i class="fa fa-smile-o fa-lg"></i>
+            </div>
+            <div class="flex-fill ms-3 text-truncate">
+              <div class="h6 mb-0">Happy Clients</div>
+              <span class="small">8,925</span>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="col">
+
+      </div>
+    </div><!-- Row end  -->
+
+    <div class="row g-3">
+      <div class="col-lg-12 col-md-12">
+        <div class="tab-filter d-flex align-items-center justify-content-between mb-3 flex-wrap">
+          <!-- <ul class="nav nav-tabs tab-card tab-body-header rounded  d-inline-flex w-sm-100">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#summery-today">Today</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#summery-week">Week</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#summery-month">Month</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#summery-year">Year</a></li>
+          </ul> -->
+          <!-- <div class="date-filter d-flex align-items-center mt-2 mt-sm-0 w-sm-100">
+            <div class="input-group">
+              <input type="date" class="form-control">
+              <button class="btn btn-primary" type="button"><i class="icofont-filter fs-5"></i></button>
+            </div>
+          </div> -->
+        </div>
+        <div class="tab-content mt-1">
+          <div class="tab-pane fade show active" id="summery-today">
+            <div class="row g-1 g-sm-3 mb-3 row-deck">
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                <div class="card">
+                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="left-info">
+                      <span class="text-muted">Customers</span>
+                      <div><span class="fs-6 fw-bold me-2">{{customers_count}}</span></div>
+                    </div>
+                    <div class="right-icon">
+                      <i class="icofont-student-alt fs-3 color-light-orange"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                <div class="card">
+                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="left-info">
+                      <span class="text-muted">Order</span>
+                      <div><span class="fs-6 fw-bold me-2">{{order_count}}</span></div>
+                    </div>
+                    <div class="right-icon">
+                      <i class="icofont-shopping-cart fs-3 color-lavender-purple"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                <div class="card">
+                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="left-info">
+                      <span class="text-muted">Avg Sale</span>
+                      <div><span class="fs-6 fw-bold me-2">₹{{average_sale}}</span></div>
+                    </div>
+                    <div class="right-icon">
+                      <i class="icofont-sale-discount fs-3 color-santa-fe"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                <div class="card">
+                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="left-info">
+                      <span class="text-muted">Avg Item Sale</span>
+                      <div><span class="fs-6 fw-bold me-2">{{average_item_sale}}</span></div>
+                    </div>
+                    <div class="right-icon">
+                      <i class="icofont-calculator-alt-2 fs-3 color-danger"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                <div class="card">
+                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="left-info">
+                      <span class="text-muted">Total Sale</span>
+                      <div><span class="fs-6 fw-bold me-2">₹{{total_sale}}</span></div>
+                    </div>
+                    <div class="right-icon">
+                      <i class="icofont-calculator-alt-1 fs-3 color-lightblue"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                <div class="card">
+                  <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="left-info">
+                      <span class="text-muted">Total Products</span>
+                      <div><span class="fs-6 fw-bold me-2">{{product_count}}</span></div>
+                    </div>
+                    <div class="right-icon">
+                      <i class="icofont-bag fs-3 color-light-orange"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- row end -->
+          </div>
+        </div>
+      </div>
+    </div><!-- Row end  -->
+
+    <!-- graphs -->
+    <div class="row ">
+      <div class="col-md-6 my-4">
+        <div class="bg-white">
+          <div class="card-body">
+            <h5>Product stock</h5>
+            <canvas id="myChart1" width="400" height="300"></canvas>
+            <script>
+              var ctx = document.getElementById('myChart1').getContext('2d');
+              var myChart1 = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                  labels: [{% for product in products %} '{{product.product_name}}', {% endfor %}],
+              datasets: [{
+                label: 'Number of Products',
+                data: [{% for product in products %} {{ product.stock }}, {% endfor %}],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)'
+                ],
+                  borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                  ],
+                    borderWidth: 1
+                        }]
+                            },
+              options: {
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }]
+                }
+              }
+                        });
+            </script>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 my-4">
+        <div class="bg-white">
+          <div class="card-body">
+            <h5>Order and quantity</h5>
+            <canvas id="myChart" width="400" height="300"></canvas>
+            <script>
+              var ctx = document.getElementById('myChart').getContext('2d');
+              var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: [{% for order in orders %} '{{order.id}}',{% endfor %}],
+              datasets: [{
+                label: 'Orders',
+                data: [{% for order in orders %} {{ order.quantity }}, {% endfor %}],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(153, 02, 155, 1)',
+                  'rgba(55, 159, 64, 1)'
+                ],
+                  borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(153, 02, 155, 1)',
+                    'rgba(55, 159, 64, 1)'
+                  ],
+                    borderWidth: 1
+                        }]
+                            },
+              options: {
+                scales: {
+                  yAxes: [{
+                    ticks: {
+                      beginAtZero: true
+                    }
+                  }]
+                }
+              }
+                        });
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-xxl-8 col-xl-8" id="chartContainer"></div>
+
+  </div>
+</div>
+
+
+
+{% endblock %}

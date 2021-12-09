@@ -1,0 +1,107 @@
+{% extends 'admin/adminBase.html' %}
+
+{% block content %}
+
+<section class="content-main">
+  <div class="content-header">
+    <h2 class="content-title">Coupon Edit</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <form onsubmit=" return CheckForm()" action="{% url 'couponEdit' coupon.id %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label for="product_name" class="form-label">Minimum Purchase Rate</label>
+              <input onchange="MinimumCheck()" type="number" value="{{coupon.minimum_rate}}" class="form-control"
+                name="purchase_rate" id="purchase_rate" />
+            </div>
+            <div class="mb-4">
+              <label for="product_slug" class="form-label">Coupon Percentage</label>
+              <input onchange="percentageCheck()" type="number" value="{{coupon.percentage}}" class="form-control"
+                name="coupon_percentage" id="coupon_percentage" />
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Expiry Date</label>
+              <input type="date" placeholder="Expiry date" class="form-control" name="expiry_date" id="expiry_date" />
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Expiry Time</label>
+              <input type="time" placeholder="Expiry date" class="form-control" name="expiry_time" id="expiry_time" />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Create Offer</button>
+            </div>
+          </form>
+        </div>
+        <!-- .col// -->
+      </div>
+      <!-- .row // -->
+    </div>
+    <!-- card body .// -->
+  </div>
+  <!-- card .// -->
+</section>
+<!-- content-main end// -->
+
+<script>
+  function percentageCheck() {
+    value = document.getElementById('coupon_percentage').value;
+    if (value > 99) {
+      alert("Offer cannot be more than 99")
+      return false;
+    } else if (value < 1) {
+      alert("Offer cannot be less than 1 ")
+      return false;
+    }
+  }
+  function MinimumCheck() {
+    value = document.getElementById('purchase_rate').value;
+    if (value < 1) {
+      alert("Value should be positive")
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  //date validation
+  $(function () {
+
+    var dtToday = new Date();
+
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate() + 1;
+    var year = dtToday.getFullYear();
+    var time = dtToday.getHours() + ":" + dtToday.getMinutes();
+    if (month < 10)
+
+      month = '0' + month.toString();
+
+    if (day < 10)
+
+      day = '0' + day.toString();
+
+    var maxDate = year + '-' + month + '-' + day
+
+    console.log(maxDate);
+
+    $('#expiry_date').attr('min', maxDate);
+
+
+  });
+
+  function CheckForm() {
+    percentageCheck = percentageCheck()
+    MinimumCheck = MinimumCheck()
+    if (percentageCheck == true, MinimumCheck == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'admin/adminBase.html' %}
+
+{% block content %}
+
+
+<section class="content-main">
+
+  <div class="content-header">
+    <h2 class="content-title">Order Cancel Report</h2>
+    <!-- <div>
+            <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+        </div> -->
+  </div>
+  <div class="card mb-4">
+    <header class="card-header">
+      <div class="row gx-3">
+        <div class="col-lg-6 col-md-6 me-auto">
+
+          <form action="{% url 'OrderCancelReport' %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-lg-5 col-6 col-md-3">
+                <b>FROM</b>
+                <input type="date" class="form-control" required name="date_from" id="date_from">
+              </div>
+              <div class="col-lg-5 col-6 col-md-3">
+                <b>TO</b>
+                <input type="date" class="form-control" required name="date_to" id="date_to">
+              </div>
+              <div class="col-lg-2 col-6 col-md-3 ">
+                <button class="btn bg-primary" style="margin-top: 22px;color:white" type="submit">Search</button>
+
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </header>
+    <!-- card-header end// -->
+    <div class="card-body">
+      <div class="table-responsive">
+        <table id="sales_data_table" class="table table-hover text-center">
+          <thead>
+            <tr>
+              <th>Order Number</th>
+              <!-- <th>ID</th> -->
+              <th scope="col">Name</th>
+              <th scope="col">product details</th>
+              <th scope="col">quantity</th>
+              <th scope="col">Total</th>
+              <th scope="col">Payment Method</th>
+              <th scope="col">Status</th>
+              <th scope="col">Date</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+            <tr>
+              <td>{{order.order_number}}</td>
+              <!-- <td>#{{order.id}}</td> -->
+              <td>{{order.user.username}}</td>
+              <td><b>{{order.product.product_name}}</b></td>
+              <td>{{order.quantity}}</td>
+              <td>{{order.sub_total}}</td>
+              <td>{{order.payment_method}}</td>
+              <td>{{order.order_status}}</td>
+              <td>{{order.date}}</td>
+              </td>
+            </tr>
+            {% endfor %}
+            <div>
+          </tbody>
+        </table>
+      </div>
+      <!-- table-responsive //end -->
+    </div>
+    <!-- card-body end// -->
+  </div>
+  <!-- card end// -->
+</section>
+
+
+
+
+<script>
+  $(document).ready(function () {
+    $('#sales_data_table').DataTable({
+      "footerCallback": function (row, data, start, end, display) {
+        var api = this.api(), data;
+
+        // Remove the formatting to get integer data for summation
+        var intVal = function (i) {
+          return typeof i === 'string' ?
+            i.replace(/[\$,]/g, '') * 1 :
+            typeof i === 'number' ?
+              i : 0;
+        };
+
+        // Total over all pages
+        total = api
+          .column(4)
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+
+        // Update footer
+        $(api.column(4).footer()).html(
+          ' ( $' + total + ' total)'
+        );
+      },
+      dom: 'Bfrtip',
+      buttons: [
+        'excel', 'pdf'
+      ],
+    });
+  });
+
+
+  //date validation
+  $(function () {
+
+    var dtToday = new Date();
+
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    var time = dtToday.getHours() + ":" + dtToday.getMinutes();
+    if (month < 10)
+
+      month = '0' + month.toString();
+
+    if (day < 10)
+
+      day = '0' + day.toString();
+
+    var maxDate = year + '-' + month + '-' + day
+
+    console.log(maxDate);
+
+    $('#date_from').attr('max', maxDate);
+    $('#date_to').attr('max', maxDate);
+
+
+  });
+
+  function checkToDate() {
+    var selected_date = document.getElementById('date_from').value;
+    $('#date_to').attr('max', selected_date);
+    console.log(selected_date)
+  }
+
+
+
+
+
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,466 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="page-wrapper">
+
+    <main class="main">
+        <div class="home-slider slide-animate owl-carousel owl-theme show-nav-hover nav-big mb-2 text-uppercase"
+            data-owl-options="{
+				'loop': false
+			}">
+            <div class="home-slide home-slide1 banner">
+                <img class="slide-bg" src="{{banner_details.banner_image.url}}" width="1903" height="499"
+                    alt="slider image">
+                <div class="container d-flex align-items-center">
+                    <div class="banner-layer appear-animate" data-animation-name="fadeInUpShorter">
+                        <h4 class="text-transform-none m-b-3">{{banner_details.tag_line}}!</h4>
+                        <h2 class="text-transform-none mb-0">{{banner_details.heading}}</h2>
+                        <h3 class="m-b-3">{{banner_details.offer_percentage}}</h3>
+                        <h5 class="d-inline-block mb-0">
+                            <span>Starting At</span>
+                            <b class="coupon-sale-text text-white bg-secondary align-middle"><sup>₹</sup><em
+                                    class="align-text-top">{{banner_details.starting_price}}</em></b>
+                        </h5>
+                        <a href="{{banner_details.button_url}}" class="btn btn-dark btn-lg">Shop
+                            Now!</a>
+                    </div>
+                    <!-- End .banner-layer -->
+                </div>
+            </div>
+            <!-- End .home-slide -->
+
+            <!-- <div class="home-slide home-slide2 banner banner-md-vw">
+                <img class="slide-bg" style="background-color: #ccc;" width="1903" height="499"
+                    src="{% static 'userAssets/assets/images/demoes/demo4/slider/slide-2.jpg' %}" alt="slider image">
+                <div class="container d-flex align-items-center">
+                    <div class="banner-layer d-flex justify-content-center appear-animate"
+                        data-animation-name="fadeInUpShorter">
+                        <div class="mx-auto">
+                            <h4 class="m-b-1">Extra</h4>
+                            <h3 class="m-b-2">20% off</h3>
+                            <h3 class="mb-2 heading-border">Accessories</h3>
+                            <h2 class="text-transform-none m-b-4">Summer Sale</h2>
+                            <a href="category.html" class="btn btn-block btn-dark">Shop All Sale</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div> -->
+            <!-- End .home-slide -->
+        </div>
+        <!-- End .home-slider -->
+
+        <div class="container">
+            <div class="info-boxes-slider owl-carousel owl-theme mb-2" data-owl-options="{
+					'dots': false,
+					'loop': false,
+					'responsive': {
+						'576': {
+							'items': 2
+						},
+						'992': {
+							'items': 3
+						}
+					}
+				}">
+                <div class="info-box info-box-icon-left">
+                    <i class="icon-shipping"></i>
+
+                    <div class="info-box-content">
+                        <h4>FREE SHIPPING &amp; RETURN</h4>
+                        <p class="text-body">Free shipping on all orders over ₹99.</p>
+                    </div>
+                    <!-- End .info-box-content -->
+                </div>
+                <!-- End .info-box -->
+
+                <div class="info-box info-box-icon-left">
+                    <i class="icon-money"></i>
+
+                    <div class="info-box-content">
+                        <h4>MONEY BACK GUARANTEE</h4>
+                        <p class="text-body">100% money back guarantee</p>
+                    </div>
+                    <!-- End .info-box-content -->
+                </div>
+                <!-- End .info-box -->
+
+                <div class="info-box info-box-icon-left">
+                    <i class="icon-support"></i>
+
+                    <div class="info-box-content">
+                        <h4>ONLINE SUPPORT 24/7</h4>
+                        <p class="text-body">We provide the best online support for our customers.</p>
+                    </div>
+                    <!-- End .info-box-content -->
+                </div>
+                <!-- End .info-box -->
+            </div>
+            <!-- End .info-boxes-slider -->
+
+
+        </div>
+        <!-- End .container -->
+
+        <section class="featured-products-section">
+            <div class="container">
+                <h2 class="section-title heading-border ls-20 border-0">Featured Products</h2>
+
+                <div class="products-slider custom-products owl-carousel owl-theme nav-outer show-nav-hover nav-image-center"
+                    data-owl-options="{
+						'dots': false,
+						'nav': true
+					}">
+
+                    {% for data in products_data|slice:":4" %}
+                    <div class="product-default appear-animate" data-animation-name="fadeInRightShorter">
+                        <figure>
+                            <a href="{% url 'productDetails' data.id %}">
+                                <img src="{{data.image.url}}" width="280" height="280" alt="product">
+                                <!-- hover image -->
+                                <img src="{{data.image.url}}" width="280" height="280" alt="product">
+                            </a>
+                            {% if data.product_offer %}
+                            <div class="label-group ">
+                                <div class="product-label label-hot text-capitalize">{{data.product_offer.offer_name}}
+                                </div>
+                                <div class="product-label label-sale text-capitalize">
+                                    -{{data.product_offer.percentage}}%</div>
+                            </div>
+                            {% endif %}
+                        </figure>
+                        <div class="product-details">
+                            <div class="category-list">
+
+                            </div>
+                            <h3 class="product-title">
+                                <a href="{% url 'productDetails' data.id %}">{{data.product_name}}</a>
+                            </h3>
+                            <div class="ratings-container">
+
+                                <div class="">
+                                    <!-- <span class="ratings" style="width:80%"></span> -->
+                                    <!-- End .ratings -->
+                                    <!-- <span class="tooltiptext tooltip-top"></span> -->
+                                </div>
+                                <!-- End .product-ratings -->
+
+                            </div>
+                            <!-- End .product-container -->
+                            <div class="price-box">
+                                <del class="old-price">₹{{data.mrp}}</del>
+                                {% if data.product_offer_price %}
+                                <span class="product-price">₹{{data.product_offer_price}}</span>
+                                {% else %}
+                                <span class="product-price">₹{{data.sale_price}}</span>
+                                {% endif %}
+                            </div>
+                            <!-- End .price-box -->
+                            {% if data.stock != 0 %}
+                            <div class="product-action">
+                                <a onclick="addToWishList('{{data.id}}')" class="btn-icon-wish" title="wishlist"><i
+                                        class="icon-heart"></i></a>
+                                <a onclick="addToCart('{{data.id}}')" class="btn-icon btn-add-cart"><i
+                                        class="icon-shopping-cart"></i><span>ADD TO
+                                        CART</span></a>
+                                <!-- <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i
+                                        class="fas fa-external-link-alt"></i></a> -->
+                            </div>
+                            {% else %}
+                            <div>
+                                <p style="color: rgb(248, 66, 66);font-size:large"><strong>Out Of Stock</strong> </p>
+                            </div>
+                            {% endif %}
+
+                        </div>
+                        <!-- End .product-details -->
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- End .featured-products -->
+            </div>
+        </section>
+
+
+
+        <section class="feature-boxes-container">
+            <div class="container appear-animate" data-animation-name="fadeInUpShorter">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="feature-box px-sm-5 feature-box-simple text-center">
+                            <div class="feature-box-icon">
+                                <i class="icon-earphones-alt"></i>
+                            </div>
+
+                            <div class="feature-box-content p-0">
+                                <h3>Customer Support</h3>
+                                <h5>You Won't Be Alone</h5>
+
+                                <p>We really care about you and your privacy as much as you do. Purchasing an item or
+                                    any other product from us you get 100% free support.</p>
+                            </div>
+                            <!-- End .feature-box-content -->
+                        </div>
+                        <!-- End .feature-box -->
+                    </div>
+                    <!-- End .col-md-4 -->
+
+                    <div class="col-md-4">
+                        <div class="feature-box px-sm-5 feature-box-simple text-center">
+                            <div class="feature-box-icon">
+                                <i class="icon-credit-card"></i>
+                            </div>
+
+                            <div class="feature-box-content p-0">
+                                <h3>Accept Credit Cards</h3>
+                                <h5>Any preferred online payments</h5>
+
+                                <p>With our products you can enjoy more benefits,You don't have to worry about liquid
+                                    money. Start ordering an amazing products right now!</p>
+                            </div>
+                            <!-- End .feature-box-content -->
+                        </div>
+                        <!-- End .feature-box -->
+                    </div>
+                    <!-- End .col-md-4 -->
+
+                    <div class="col-md-4">
+                        <div class="feature-box px-sm-5 feature-box-simple text-center">
+                            <div class="feature-box-icon">
+                                <i class="icon-action-undo"></i>
+                            </div>
+                            <div class="feature-box-content p-0">
+                                <h3>Return Policy </h3>
+                                <h5>Made To Help You</h5>
+
+                                <p>If you don't like the product which you purchased , We have got you covered, You can
+                                    return the item to us
+                                    and you won't loose any amount of money
+                                </p>
+                            </div>
+                            <!-- End .feature-box-content -->
+                        </div>
+                        <!-- End .feature-box -->
+                    </div>
+                    <!-- End .col-md-4 -->
+                </div>
+                <!-- End .row -->
+            </div>
+            <!-- End .container-->
+        </section>
+        <!-- End .feature-boxes-container -->
+
+        <!-- <section class="promo-section bg-dark" data-parallax="{'speed': 2, 'enableOnMobile': true}"
+            data-image-src="{% static 'userAssets/assets/images/demoes/demo4/banners/banner-5.jpg' %}">
+            <div class="promo-banner banner container text-uppercase">
+                <div class="banner-content row align-items-center text-center">
+                    <div class="col-md-4 ml-xl-auto text-md-right appear-animate"
+                        data-animation-name="fadeInRightShorter" data-animation-delay="600">
+                        <h2 class="mb-md-0 text-white">Top Fashion<br>Deals</h2>
+                    </div>
+                    <div class="col-md-4 col-xl-3 pb-4 pb-md-0 appear-animate" data-animation-name="fadeIn"
+                        data-animation-delay="300">
+                        <a href="#" class="btn btn-dark btn-black ls-10">View Sale</a>
+                    </div>
+                    <div class="col-md-4 mr-xl-auto text-md-left appear-animate" data-animation-name="fadeInLeftShorter"
+                        data-animation-delay="600">
+                        <h4 class="mb-1 mt-1 font1 coupon-sale-text p-0 d-block ls-n-10 text-transform-none">
+                            <b>Exclusive
+                                COUPON</b>
+                        </h4>
+                        <h5 class="mb-1 coupon-sale-text text-white ls-10 p-0"><i class="ls-0">UP TO</i><b
+                                class="text-white bg-secondary ls-n-10">₹100</b> OFF</h5>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+        <div class="container mt-5">
+            <h2 class="section-title heading-border ls-20 border-0">Trending Products</h2>
+
+            <div class="products-slider custom-products owl-carousel owl-theme nav-outer show-nav-hover nav-image-center"
+                data-owl-options="{
+        						'dots': false,
+        						'nav': true
+        					}">
+
+                {% for data in products_data_reversed|slice:":4"%}
+                <div class="product-default appear-animate" data-animation-name="fadeInRightShorter">
+                    <figure>
+                        <a href="{% url 'productDetails' data.id %}">
+                            <img src="{{data.image.url}}" width="280" height="280" alt="product">
+                            <!-- hover image -->
+                            <img src="{{data.image.url}}" width="280" height="280" alt="product">
+                        </a>
+                        {% if data.product_offer %}
+                        <div class="label-group ">
+                            <div class="product-label label-hot text-capitalize">{{data.product_offer.offer_name}}
+                            </div>
+                            <div class="product-label label-sale text-capitalize">
+                                -{{data.product_offer.percentage}}%</div>
+                        </div>
+                        {% endif %}
+                    </figure>
+                    <div class="product-details">
+                        <div class="category-list">
+
+                        </div>
+                        <h3 class="product-title">
+                            <a href="{% url 'productDetails' data.id %}">{{data.product_name}}</a>
+                        </h3>
+                        <div class="ratings-container">
+
+                            <div class="">
+                                <!-- <span class="ratings" style="width:80%"></span> -->
+                                <!-- End .ratings -->
+                                <!-- <span class="tooltiptext tooltip-top"></span> -->
+                            </div>
+                            <!-- End .product-ratings -->
+
+                        </div>
+                        <!-- End .product-container -->
+                        <div class="price-box">
+                            <del class="old-price">₹{{data.mrp}}</del>
+                            {% if data.product_offer_price %}
+                            <span class="product-price">₹{{data.product_offer_price}}</span>
+                            {% else %}
+                            <span class="product-price">₹{{data.sale_price}}</span>
+                            {% endif %}
+                        </div>
+                        <!-- End .price-box -->
+                        {% if data.stock != 0 %}
+                        <div class="product-action">
+                            <a onclick="addToWishList('{{data.id}}')" class="btn-icon-wish" title="wishlist"><i
+                                    class="icon-heart"></i></a>
+                            <a onclick="addToCart('{{data.id}}')" class="btn-icon btn-add-cart"><i
+                                    class="icon-shopping-cart"></i><span>ADD TO
+                                    CART</span></a>
+                            <!-- <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i
+                                                class="fas fa-external-link-alt"></i></a> -->
+                        </div>
+                        {% else %}
+                        <div>
+                            <p style="color: rgb(248, 66, 66);font-size:large"><strong>Out Of Stock</strong> </p>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                    <!-- End .product-details -->
+                </div>
+                {% endfor %}
+            </div>
+            <!-- End .featured-products -->
+        </div>
+
+        <section class="blog-section pb-0">
+            <div class="container">
+
+                <div class="owl-carousel owl-theme appear-animate" data-animation-name="fadeIn" data-owl-options="{
+						'loop': false,
+						'margin': 20,
+						'autoHeight': true,
+						'autoplay': false,
+						'dots': false,
+						'items': 2,
+						'responsive': {
+							'0': {
+								'items': 1
+							},
+							'480': {
+								'items': 2
+							},
+							'576': {
+								'items': 3
+							},
+							'768': {
+								'items': 4
+							}
+						}
+					}">
+
+                </div>
+
+                <hr class="mt-0 m-b-5">
+
+                <div class="brands-slider owl-carousel owl-theme images-center appear-animate"
+                    data-animation-name="fadeIn" data-animation-duration="500" data-owl-options="{
+					'margin': 0}">
+                    <img src="{% static 'userAssets/assets/images/brands/brand1.png' %}" width="130" height="56"
+                        alt="brand">
+                    <img src="{% static 'userAssets/assets/images/brands/brand2.png' %}" width="130" height="56"
+                        alt="brand">
+                    <img src="{% static 'userAssets/assets/images/brands/brand3.png' %}" width="130" height="56"
+                        alt="brand">
+                    <img src="{% static 'userAssets/assets/images/brands/brand4.png' %}" width="130" height="56"
+                        alt="brand">
+                    <img src="{% static 'userAssets/assets/images/brands/brand5.png' %}" width="130" height="56"
+                        alt="brand">
+                    <img src="{% static 'userAssets/assets/images/brands/brand6.png' %}" width="130" height="56"
+                        alt="brand">
+                </div>
+                <!-- End .brands-slider -->
+
+
+                <!-- End .row -->
+            </div>
+        </section>
+    </main>
+    <!-- End .main -->
+
+
+    <!-- End .footer -->
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- End .page-wrapper -->
+<script>
+    function addToCart(product_id) {
+        console.log(product_id)
+        var data = { 'product_id': product_id }
+
+        $.ajax({
+            url: "{% url 'add_cart'%}",
+            method: "GET",
+            data: data,
+            success: function () {
+                $("#cart_count").load(window.location.href + " #cart_count");
+                Toastify({
+
+                    text: "Item added to cart",
+                    duration: 3000,
+                    style: {
+                        background: "linear-gradient(to right, #ff512f , #dd2449)",
+                    }
+
+                }).showToast();
+            }
+        })
+
+    }
+
+
+
+</script>
+
+<script>
+    function addToWishList(product_id) {
+        console.log(product_id)
+        var data = { 'product_id': product_id }
+
+        $.ajax({
+            url: "{% url 'add_wishlist'%}",
+            method: "GET",
+            data: data,
+            success: function () {
+                console.log("ajax success")
+            }
+        })
+
+    }
+
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,744 @@
+{% extends 'admin/adminBase.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+  <div class="container-xxl">
+
+    <div class="row align-items-center">
+      <div class="border-0 mb-4">
+        <div
+          class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+          <h3 class="fw-bold mb-0">Products Edit</h3>
+
+        </div>
+      </div>
+    </div> <!-- Row end  -->
+  </div>
+  <div class="col-xl-12 col-lg-12">
+    <div class="card mb-3">
+      <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+        <h6 class="mb-0 fw-bold ">Product information</h6>
+      </div>
+      <div class="card-body">
+        <!-- form -->
+        <form method="POST" action="{% url 'productEdit'  edit_product_data.id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="row g-3 align-items-center">
+            <div class="col-md-12">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" name="product_name" value="{{edit_product_data.product_name}}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">MRP</label>
+              <input type="number" class="form-control" name="product_mrp" value="{{edit_product_data.mrp}}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Sale price</label>
+              <input type="number" class="form-control" name="product_sale_price"
+                value="{{edit_product_data.sale_price}}">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Stock</label>
+              <input type="number" class="form-control" name="product_stock" value="{{edit_product_data.stock}}">
+            </div>
+            <div class="col-md-12">
+              <label class="form-label">Product Description</label>
+              <input style="height:120px" type=" text" class="form-control" name="product_description"
+                value="{{edit_product_data.description}}">
+            </div>
+          </div>
+
+          <div class="card mb-3 mt-3">
+            <div
+              class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+              <h6 class="m-0 fw-bold">Size</h6>
+            </div>
+            <div class="card-body">
+              <div class="form-check">
+                {% if edit_product_data.size_s %}
+                <input class="form-check-input" type="checkbox" checked value="" id="sizechek2" name="product_size_S">
+                {% else %}
+                <input class="form-check-input" type="checkbox" value="" id="sizechek2" name="product_size_S">
+                {% endif %}
+                <label class="form-check-label" for="sizechek2">
+                  S
+                </label>
+              </div>
+              <div class="form-check">
+                {% if edit_product_data.size_m %}
+                <input class="form-check-input" type="checkbox" checked value="" id="sizechek3" name="product_size_M">
+                {% else %}
+                <input class="form-check-input" type="checkbox" value="" id="sizechek3" name="product_size_M">
+                {% endif %}
+                <label class="form-check-label" for="sizechek3">
+                  M
+                </label>
+              </div>
+              <div class="form-check">
+                {% if edit_product_data.size_l %}
+                <input class="form-check-input" type="checkbox" checked value="" id="sizechek4" name="product_size_L">
+                {% else %}
+                <input class="form-check-input" type="checkbox" value="" id="sizechek4" name="product_size_L">
+                {% endif %}
+                <label class="form-check-label" for="sizechek4">
+                  L
+                </label>
+              </div>
+              <div class="form-check">
+                {% if edit_product_data.size_xl %}
+                <input class="form-check-input" type="checkbox" checked value="" id="sizechek5" name="product_size_XL">
+                {% else %}
+                <input class="form-check-input" type="checkbox" value="" id="sizechek5" name="product_size_XL">
+                {% endif %}
+                <label class="form-check-label" for="sizechek5">
+
+                  XL
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-3 mt-3 ">
+            <div
+              class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+              <h6 class="m-0 fw-bold">Categories</h6>
+            </div>
+            <div class="card-body">
+              <label class="form-label">Categories Select</label>
+              <select class="form-select" size="3" aria-label="size 3 select example" name="product_category_id">
+                <option selected value="{{edit_product_data.category.id}}"> {{edit_product_data.category.category_name}}
+                </option>
+                {% for data in product_data %}
+                <option value="{{data.id}}">{{ data.category_name }} </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <label class="form-label mt-3">Offer Select</label>
+          <select class="form-select " size="3" aria-label="size 3 select example " name="offer_id">
+            <option selected value="{{edit_product_data.product_offer.id}}">
+              {{edit_product_data.product_offer.offer_name}}
+            </option>
+            {% for offer in offers %}
+            <option value="{{offer.id}}">{{offer.offer_name}}</option>
+            {% endfor %}
+            <option value="None">None</option>
+          </select>
+
+          <div class="card mb-3">
+            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+              <h6 class="mb-0 fw-bold ">Images</h6>
+            </div>
+            <img class="w120 rounded img-fluid" src="{{edit_product_data.image.url}}" alt="">
+
+            <div class="card-body">
+              <div class="row g-3 align-items-center">
+                <div class="col-md-12">
+                  <label class="form-label">Product Images Upload</label>
+                  <small class="d-block text-muted mb-2">800x800 px would be suitable.</small>
+                  <input onchange="fileValidation('product_image')" class="form-control" type="file" id="product_image"
+                    class="dropify">
+                  <textarea name="product_image" id="pro_img" style="display: none;"></textarea>
+                  <img src="" id="imageview" style="height: auto;width: 100px;">
+
+                </div>
+              </div>
+            </div>
+          </div>
+          {% if gallery_images %}
+          {% for gallery_image in gallery_images %}
+          <div class="card mb-3 mt-3">
+            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+              <h6 class=" fw-bold ">Upload Gallery images</h6>
+            </div>
+            <img class="w120 rounded img-fluid" src="{{gallery_image.image.url}}" alt="">
+            <div class="card-body">
+              <div class="row g-3 align-items-center">
+                <div class="col-md-12">
+                  <label class="form-label">Gallery images</label>
+                  <small class="d-block text-muted mb-2">800x800 px would be suitable.</small>
+
+                  <input onchange="fileValidation('product_gallery{{forloop.counter}}')" class="form-control"
+                    type="file" id="product_gallery{{ forloop.counter }}" class="dropify">
+                  <textarea name="product_gallery{{ forloop.counter }}" id="pro_img{{ forloop.counter }}"
+                    style="display: none;"></textarea>
+                  <img src="" id="imageview{{ forloop.counter }}" style="height: auto;width: 100px;">
+
+                  <input class="d-none" type="text" value="{{gallery_image.id}}"
+                    name="gallery_image_id{{ forloop.counter }}">
+                  <div>
+                    <img class="w90 rounded img-fluid" id="gallery_image_preview{{ forloop.counter }}">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          {% else %}
+          <div class="card mb-3 mt-3">
+            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+              <h6 class=" fw-bold ">Upload Gallery images</h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3 align-items-center">
+                <div class="col-md-12">
+                  <small class="d-block text-muted mb-2">800x800 px would be suitable.</small>
+                  <input onchange="fileValidation('new_product_gallery1')" class="form-control mt-2"
+                    name="new_product_gallery1" type="file" id="new_product_gallery1" class="dropify">
+                  <div>
+                    <img class="w90 rounded img-fluid" id="gallery_image_preview1">
+                  </div>
+                  <input onchange="fileValidation('new_product_gallery2')" class="form-control mt-2"
+                    name="new_product_gallery2" type="file" id="new_product_gallery2" class="dropify">
+                  <div>
+                    <img class="w90 rounded img-fluid" id="gallery_image_preview2">
+                  </div>
+                  <input onchange="fileValidation('new_product_gallery3')" class="form-control mt-2"
+                    name="new_product_gallery3" type="file" id="new_product_gallery3" class="dropify">
+                  <div>
+                    <img class="w90 rounded img-fluid" id="gallery_image_preview3">
+                  </div>
+                  <input onchange="fileValidation('new_product_gallery4')" class="form-control mt-2"
+                    name="new_product_gallery4" type="file" id="new_product_gallery4" class="dropify">
+                  <div>
+                    <img class="w90 rounded img-fluid" id="gallery_image_preview4">
+                  </div>
+                  <input class="d-none" type="text" name="gallery_image_add_id" value="{{edit_product_data.id}}">
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Save</button>
+        </form>
+
+      </div>
+    </div>
+    < </div>
+  </div><!-- Row end  -->
+
+</div>
+</div>
+</div>
+
+</div>
+
+<!-- MODAL 1 -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="result"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+        </button>
+        <button type="button" id="btnCrop1" class="btn save btn-primary">Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 2 -->
+<div class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="result2"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+        </button>
+        <button type="button" id="btnCrop1" class="btn save2 btn-primary">Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 3 -->
+<div class="modal fade" id="exampleModalCenter3" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="result3"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+        </button>
+        <button type="button" id="btnCrop1" class="btn save3 btn-primary">Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 4 -->
+<div class="modal fade" id="exampleModalCenter4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="result4"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+        </button>
+        <button type="button" id="btnCrop1" class="btn save4 btn-primary">Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL 5 -->
+<div class="modal fade" id="exampleModalCenter5" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crop Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="result5"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+        </button>
+        <button type="button" id="btnCrop1" class="btn save5 btn-primary">Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block additions %}
+
+
+<!-- Jquery Plugin -->
+<script src="{% static 'adminAssets/assets/js/ckeditor.js' %}"></script>
+<script src="{% static 'adminAssets/assets/plugin/multi-select/js/jquery.multi-select.js' %}"></script>
+<script src="{% static 'adminAssets/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.js' %}"></script>
+<!-- <script src="{% static 'adminAssets/assets/plugin/cropper/cropper.min.js' %}"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/0.8.1/cropper.min.js"></script>
+<script src="{% static 'adminAssets/assets/plugin/cropper/cropper-init.js' %}"></script>
+<script src="{% static 'adminAssets/assets/bundles/dropify.bundle.js' %}"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+  function fileValidation(id) {
+    var fileInput = document.getElementById(id);
+    var filePath = fileInput.value;
+    // Allowing file type
+    var allowedExtensions =
+      /(\.jpg|\.jpeg|\.png)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+
+      Swal.fire({
+        title: 'Invalid Filetype',
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+
+        }
+      })
+      fileInput.value = '';
+      return false;
+    } else {
+      console.log("valid file type")
+    }
+
+  }
+
+
+
+
+
+
+
+  $(document).ready(function () {
+    //Ch-editer
+    ClassicEditor
+      .create(document.querySelector('#editor'))
+      .catch(error => {
+        console.error(error);
+      });
+    //Datatable
+
+    $('.deleterow').on('click', function () {
+      var tablename = $(this).closest('table').DataTable();
+      tablename
+        .row($(this)
+          .parents('tr'))
+        .remove()
+        .draw();
+
+    });
+    //Multiselect
+    $('#optgroup').multiSelect({ selectableOptgroup: true });
+  });
+
+  $(function () {
+    $('.dropify').dropify();
+
+    var drEvent = $('#dropify-event').dropify();
+    drEvent.on('dropify.beforeClear', function (event, element) {
+      return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+    });
+
+    drEvent.on('dropify.afterClear', function (event, element) {
+      alert('File deleted');
+    });
+
+    $('.dropify-fr').dropify({
+      messages: {
+        default: 'Glissez-dÃ©posez un fichier ici ou cliquez',
+        replace: 'Glissez-dÃ©posez un fichier ou cliquez pour remplacer',
+        remove: 'Supprimer',
+        error: 'DÃ©solÃ©, le fichier trop volumineux'
+      }
+    });
+  });
+
+</script>
+
+<script>
+  let result = document.querySelector('.result'),
+    save = document.querySelector('.save'),
+    cropped = document.querySelector('.imageview'),
+    upload = document.querySelector('#product_image'),
+    cropper = '';
+
+  upload.addEventListener('change', (e) => {
+    var fileName = document.getElementById("product_image").value;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+      if (e.target.files.length) {
+        // start file reader
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target.result) {
+            // create new image
+            $("#exampleModalCenter").modal("show");
+            let img = document.createElement('img');
+            img.id = 'image';
+            img.src = e.target.result;
+            // clean result before
+            result.innerHTML = '';
+            // append new image
+            result.appendChild(img);
+            // init cropper
+            cropper = new Cropper(img, {
+              aspectRatio: 8 / 6,
+              viewMode: 1,
+            });
+          }
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    } else {
+      swal("this file type is not supported", {
+        icon: "error",
+      })
+      fileName = "";
+      console.log(fileName)
+    }
+  });
+
+  save.addEventListener('click', (e) => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc = cropper.getCroppedCanvas({
+      width: 800,
+      height: 600 // img display value
+    }).toDataURL();
+    $("#exampleModalCenter").modal("hide");
+    imageview.src = imgSrc;
+    $('#pro_img').val(imgSrc);
+
+  });
+</script>
+
+<script>
+  let result2 = document.querySelector('.result2'),
+    save2 = document.querySelector('.save2'),
+    cropped2 = document.querySelector('.imageview1'),
+    upload2 = document.querySelector('#product_gallery1'),
+    cropper2 = '';
+
+  upload2.addEventListener('change', (e) => {
+    var fileName = document.getElementById("product_gallery1").value;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+      if (e.target.files.length) {
+        // start file reader
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target.result) {
+            // create new image
+            $("#exampleModalCenter2").modal("show");
+            let img2 = document.createElement('img');
+            img2.id = 'image2';
+            img2.src = e.target.result;
+            // clean result before
+            result2.innerHTML = '';
+            // append new image
+            result2.appendChild(img2);
+            // init cropper
+            cropper2 = new Cropper(img2, {
+              aspectRatio: 8 / 6,
+              viewMode: 1,
+            });
+          }
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    } else {
+      swal("this file type is not supported", {
+        icon: "error",
+      })
+      fileName = "";
+      console.log(fileName)
+    }
+  });
+
+  save2.addEventListener('click', (e) => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc2 = cropper2.getCroppedCanvas({
+      width: 800,
+      height: 600 // img disp value
+    }).toDataURL();
+    $("#exampleModalCenter2").modal("hide");
+    imageview1.src = imgSrc2;
+    $('#pro_img1').val(imgSrc2)
+
+  });
+
+
+</script>
+
+<script>
+  let result3 = document.querySelector('.result3'),
+    save3 = document.querySelector('.save3'),
+    cropped3 = document.querySelector('.imageview2'),
+    upload3 = document.querySelector('#product_gallery2'),
+    cropper3 = '';
+
+  upload3.addEventListener('change', (e) => {
+    var fileName = document.getElementById("product_gallery2").value;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+      if (e.target.files.length) {
+        // start file reader
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target.result) {
+            // create new image
+            $("#exampleModalCenter3").modal("show");
+            let img3 = document.createElement('img');
+            img3.id = 'image3';
+            img3.src = e.target.result;
+            // clean result before
+            result3.innerHTML = '';
+            // append new image
+            result3.appendChild(img3);
+            // init cropper
+            cropper3 = new Cropper(img3, {
+              aspectRatio: 8 / 6,
+              viewMode: 1,
+            });
+          }
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    } else {
+      swal("this file type is not supported", {
+        icon: "error",
+      })
+      fileName = "";
+      console.log(fileName)
+    }
+  });
+
+  save3.addEventListener('click', (e) => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc3 = cropper3.getCroppedCanvas({
+      width: 800,
+      height: 600 // img disp value
+    }).toDataURL();
+    $("#exampleModalCenter3").modal("hide");
+    imageview2.src = imgSrc3;
+    $('#pro_img2').val(imgSrc3)
+
+  });
+
+
+</script>
+
+<script>
+  let result4 = document.querySelector('.result4'),
+    save4 = document.querySelector('.save4'),
+    cropped4 = document.querySelector('.imageview3'),
+    upload4 = document.querySelector('#product_gallery3'),
+    cropper4 = '';
+
+  upload4.addEventListener('change', (e) => {
+    var fileName = document.getElementById("product_gallery3").value;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+      if (e.target.files.length) {
+        // start file reader
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target.result) {
+            // create new image
+            $("#exampleModalCenter4").modal("show");
+            let img4 = document.createElement('img');
+            img4.id = 'image4';
+            img4.src = e.target.result;
+            // clean result before
+            result4.innerHTML = '';
+            // append new image
+            result4.appendChild(img4);
+            // init cropper
+            cropper4 = new Cropper(img4, {
+              aspectRatio: 8 / 6,
+              viewMode: 1,
+            });
+          }
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    } else {
+      swal("this file type is not supported", {
+        icon: "error",
+      })
+      fileName = "";
+      console.log(fileName)
+    }
+  });
+
+  save4.addEventListener('click', (e) => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc4 = cropper4.getCroppedCanvas({
+      width: 800,
+      height: 600 // img disp value
+    }).toDataURL();
+    $("#exampleModalCenter4").modal("hide");
+    imageview3.src = imgSrc4;
+    $('#pro_img3').val(imgSrc4)
+
+  });
+
+
+</script>
+
+<script>
+  let result5 = document.querySelector('.result5'),
+    save5 = document.querySelector('.save5'),
+    cropped5 = document.querySelector('.imageview4'),
+    upload5 = document.querySelector('#product_gallery4'),
+    cropper5 = '';
+
+  upload5.addEventListener('change', (e) => {
+    var fileName = document.getElementById("product_gallery4").value;
+    var idxDot = fileName.lastIndexOf(".") + 1;
+    var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+      if (e.target.files.length) {
+        // start file reader
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target.result) {
+            // create new image
+            $("#exampleModalCenter5").modal("show");
+            let img5 = document.createElement('img');
+            img5.id = 'image5';
+            img5.src = e.target.result;
+            // clean result before
+            result5.innerHTML = '';
+            // append new image
+            result5.appendChild(img5);
+            // init cropper
+            cropper5 = new Cropper(img5, {
+              aspectRatio: 8 / 6,
+              viewMode: 1,
+            });
+          }
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    } else {
+      swal("this file type is not supported", {
+        icon: "error",
+      })
+      fileName = "";
+      console.log(fileName)
+    }
+  });
+
+  save5.addEventListener('click', (e) => {
+    e.preventDefault();
+    // get result to data uri
+    let imgSrc5 = cropper5.getCroppedCanvas({
+      width: 800,
+      height: 600 // img disp value
+    }).toDataURL();
+    $("#exampleModalCenter5").modal("hide");
+    imageview4.src = imgSrc5;
+    $('#pro_img4').val(imgSrc5)
+
+  });
+
+
+</script>
+
+{% endblock %}
+{% endblock %}

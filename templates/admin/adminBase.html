@@ -1,0 +1,427 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>::BlueMoonAdmin:: Dashboard </title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+
+  <!-- plugin css file  -->
+  <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"> -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="{% static 'adminAssets/assets/plugin/datatables/responsive.dataTables.min.css' %}">
+  <link rel="stylesheet" href="{% static 'adminAssets/assets/plugin/datatables/dataTables.bootstrap5.min.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+  <!--Chart js CDN-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+  <!-- Jquery Core Js -->
+  <script src="{% static 'adminAssets/assets/bundles/libscripts.bundle.js'%}"></script>
+  <script src="{% static 'adminAssets/assets/bundles/dataTables.bundle.js' %}"></script>
+  <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+
+
+  <!-- project css file  -->
+  <link rel="stylesheet" href="{% static 'adminAssets/assets/css/ebazar.style.min.css' %}">
+
+  <!-- cropper -->
+  <link rel="stylesheet" href="{% static 'adminAssets/assets/css/cropper.min.css' %}">
+</head>
+
+<body>
+  <div id="ebazar-layout" class="theme-blue">
+
+    <!-- sidebar -->
+    <div class="sidebar px-4 py-4 py-md-4 me-0">
+      <div class="d-flex flex-column h-100">
+        <a href="{% url 'adminLogin' %}" class="mb-0 brand-icon">
+          <span class="logo-icon">
+            <i class="bi bi-bag-check-fill fs-4"></i>
+          </span>
+          <span class="logo-text">BlueMoon</span>
+        </a>
+        <!-- Menu: main ul -->
+        <ul class="menu-list flex-grow-1 mt-3">
+          <li><a class="m-link active" href="{% url 'adminLogin' %}"><i class="icofont-home fs-5"></i>
+              <span>Dashboard</span></a></li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
+              <i class="icofont-truck-loaded fs-5"></i> <span>Products</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="menu-product">
+              <li><a class="ms-link" href="{% url 'productList' %}">Product List</a></li>
+              <li><a class="ms-link" href="{% url 'productAdd' %}">Product Add</a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#categories" href="#">
+              <i class="icofont-chart-flow fs-5"></i> <span>Categories</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="categories">
+              <li><a class="ms-link" href="{% url 'ParentCategoryList' %}">Parent Categories</a></li>
+              <li><a class="ms-link" href="{% url 'SubCategoryList' %}">Sub Categories</a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
+              <i class="icofont-notepad fs-5"></i> <span>Orders</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="menu-order">
+              <li><a class="ms-link" href="{% url 'orderList' %}">Orders List</a></li>
+              <!-- <li><a class="ms-link" href="order-details.html">Order Details</a></li> -->
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#customers-info" href="#">
+              <i class="icofont-funky-man fs-5"></i> <span>Customers</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="customers-info">
+              <li><a class="ms-link" href="{% url 'customerList' %}">Customers List</a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-coupon" href="#">
+              <i class="icofont-sale-discount fs-5"></i> <span>Coupon Management</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="menu-coupon">
+              <li><a class="ms-link" href="{% url 'couponList' %}">Coupons Details</a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-offer" href="#">
+              <i class="icofont-sale-discount fs-5"></i> <span>Offer Management</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="menu-offer">
+              <li><a class="ms-link" href="{% url 'offerAdd' %}">Offers</a></li>
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#sale_report" href="#">
+              <i class="icofont-sale-discount fs-5"></i> <span>Reports</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="sale_report">
+              <li><a class="ms-link" href="{% url 'dailySales' %}">daily Report</a></li>
+              <li><a class="ms-link" href="{% url 'weeklySales' %}">Weekly Report</a></li>
+              <li><a class="ms-link" href="{% url 'yearlySales' %}">Yearly Report</a></li>
+              <li><a class="ms-link" href="{% url 'OrderCancelReport' %}">Order Cancel Report</a></li>
+
+            </ul>
+          </li>
+          <li class="collapsed">
+            <a class="m-link" data-bs-toggle="collapse" data-bs-target="#banners" href="#">
+              <i class="icofont-chart-flow fs-5"></i> <span>Banner Management</span> <span
+                class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+            <!-- Menu: Sub menu ul -->
+            <ul class="sub-menu collapse" id="banners">
+              <li><a class="ms-link" href="{% url 'bannerEdit' %}">Banners</a></li>
+            </ul>
+          </li>
+          <!-- Menu: Sub menu ul -->
+          <!-- <ul class="sub-menu collapse" id="page">
+                        <li><a class="ms-link" href="admin-profile.html">Profile Page</a></li>
+                        <li><a class="ms-link" href="purchase-plan.html">Price Plan Example</a></li>
+                        <li><a class="ms-link" href="charts.html">Charts Example</a></li>
+                        <li><a class="ms-link" href="table.html">Table Example</a></li>
+                        <li><a class="ms-link" href="forms.html">Forms Example</a></li>
+                        <li><a class="ms-link" href="icon.html">Icons</a></li>
+                        <li><a class="ms-link" href="contact.html">Contact Us</a></li>
+                    </ul> -->
+          </li>
+        </ul>
+        <!-- Menu: menu collepce btn -->
+        <button type="button" class="btn btn-link sidebar-mini-btn text-light">
+          <span class="ms-2"><i class="icofont-bubble-right"></i></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- main body area -->
+    <div class="main px-lg-4 px-md-4">
+
+      <!-- Body: Header -->
+      <div class="header">
+        <nav class="navbar py-4">
+          <div class="container-xxl">
+
+            <!-- header rightbar icon -->
+            <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
+              <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
+                <div class="u-info me-2">
+                  <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">{{ user.first_name }}</span>
+                  </p>
+                </div>
+                <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown"
+                  data-bs-display="static">
+                  <img class="avatar lg rounded-circle img-thumbnail"
+                    src="{% static 'adminAssets/assets/images/profile_av.svg' %}" alt="profile">
+                </a>
+                <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
+                  <div class="card border-0 w280">
+                    <div class="card-body pb-0">
+                      <div class="d-flex py-1">
+                        <img class="avatar rounded-circle" src="{% static 'adminAssets/assets/images/profile_av.svg' %}"
+                          alt="profile">
+                        <div class="flex-fill ms-3">
+                          <p class="mb-0"><span class="font-weight-bold">{{ user.first_name }}</span></p>
+                          <small class="">{{ user.email }}</small>
+                        </div>
+                      </div>
+
+                      <div>
+                        <hr class="dropdown-divider border-dark">
+                      </div>
+                    </div>
+                    <div class="list-group m-2 ">
+                      <a href="{% url 'adminLogout' %}" class="list-group-item list-group-item-action border-0 "><i
+                          class="icofont-logout fs-5 me-3"></i>Signout</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="setting ms-2">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#Settingmodal"><i
+                    class="icofont-gear-alt fs-5"></i></a>
+              </div>
+            </div>
+
+            <!-- menu toggler -->
+            <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainHeader">
+              <span class="fa fa-bars"></span>
+            </button>
+            <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
+            </div>
+
+          </div>
+        </nav>
+      </div>
+      {% block content %}
+      <!-- body content -->
+      {% endblock %}
+
+      <!-- Modal Custom Settings-->
+      <div class="modal fade right" id="Settingmodal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog  modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Custom Settings</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body custom_setting">
+              <!-- Settings: Color -->
+              <div class="setting-theme pb-3">
+                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i
+                    class="icofont-color-bucket fs-4 me-2 text-primary"></i>Template Color Settings
+                </h6>
+                <ul class="list-unstyled row row-cols-3 g-2 choose-skin mb-2 mt-2">
+                  <li data-theme="indigo">
+                    <div class="indigo"></div>
+                  </li>
+                  <li data-theme="tradewind">
+                    <div class="tradewind"></div>
+                  </li>
+                  <li data-theme="monalisa">
+                    <div class="monalisa"></div>
+                  </li>
+                  <li data-theme="blue" class="active">
+                    <div class="blue"></div>
+                  </li>
+                  <li data-theme="cyan">
+                    <div class="cyan"></div>
+                  </li>
+                  <li data-theme="green">
+                    <div class="green"></div>
+                  </li>
+                  <li data-theme="orange">
+                    <div class="orange"></div>
+                  </li>
+                  <li data-theme="blush">
+                    <div class="blush"></div>
+                  </li>
+                  <li data-theme="red">
+                    <div class="red"></div>
+                  </li>
+                </ul>
+              </div>
+              <div class="sidebar-gradient py-3">
+                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i
+                    class="icofont-paint fs-4 me-2 text-primary"></i>Sidebar Gradient</h6>
+                <div class="form-check form-switch gradient-switch pt-2 mb-2">
+                  <input class="form-check-input" type="checkbox" id="CheckGradient">
+                  <label class="form-check-label" for="CheckGradient">Enable Gradient! ( Sidebar
+                    )</label>
+                </div>
+              </div>
+              <!-- Settings: Template dynamics -->
+              <div class="dynamic-block py-3">
+                <ul class="list-unstyled choose-skin mb-2 mt-1">
+                  <li data-theme="dynamic">
+                    <div class="dynamic"><i class="icofont-paint me-2"></i> Click to Dyanmic Setting
+                    </div>
+                  </li>
+                </ul>
+                <div class="dt-setting">
+                  <ul class="list-group list-unstyled mt-1">
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+                      <label>Primary Color</label>
+                      <button id="primaryColorPicker" class="btn bg-primary avatar xs border-0 rounded-0"></button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+                      <label>Secondary Color</label>
+                      <button id="secondaryColorPicker" class="btn bg-secondary avatar xs border-0 rounded-0"></button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+                      <label class="text-muted">Chart Color 1</label>
+                      <button id="chartColorPicker1" class="btn chart-color1 avatar xs border-0 rounded-0"></button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+                      <label class="text-muted">Chart Color 2</label>
+                      <button id="chartColorPicker2" class="btn chart-color2 avatar xs border-0 rounded-0"></button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+                      <label class="text-muted">Chart Color 3</label>
+                      <button id="chartColorPicker3" class="btn chart-color3 avatar xs border-0 rounded-0"></button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+                      <label class="text-muted">Chart Color 4</label>
+                      <button id="chartColorPicker4" class="btn chart-color4 avatar xs border-0 rounded-0"></button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+                      <label class="text-muted">Chart Color 5</label>
+                      <button id="chartColorPicker5" class="btn chart-color5 avatar xs border-0 rounded-0"></button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- Settings: Font -->
+              <div class="setting-font py-3">
+                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i
+                    class="icofont-font fs-4 me-2 text-primary"></i>
+                  Font Settings</h6>
+                <ul class="list-group font_setting mt-1">
+                  <li class="list-group-item py-1 px-2">
+                    <div class="form-check mb-0">
+                      <input class="form-check-input" type="radio" name="font" id="font-poppins" value="font-poppins">
+                      <label class="form-check-label" for="font-poppins">
+                        Poppins Google Font
+                      </label>
+                    </div>
+                  </li>
+                  <li class="list-group-item py-1 px-2">
+                    <div class="form-check mb-0">
+                      <input class="form-check-input" type="radio" name="font" id="font-opensans" value="font-opensans"
+                        checked="">
+                      <label class="form-check-label" for="font-opensans">
+                        Open Sans Google Font
+                      </label>
+                    </div>
+                  </li>
+                  <li class="list-group-item py-1 px-2">
+                    <div class="form-check mb-0">
+                      <input class="form-check-input" type="radio" name="font" id="font-montserrat"
+                        value="font-montserrat">
+                      <label class="form-check-label" for="font-montserrat">
+                        Montserrat Google Font
+                      </label>
+                    </div>
+                  </li>
+                  <li class="list-group-item py-1 px-2">
+                    <div class="form-check mb-0">
+                      <input class="form-check-input" type="radio" name="font" id="font-mukta" value="font-mukta">
+                      <label class="form-check-label" for="font-mukta">
+                        Mukta Google Font
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <!-- Settings: Light/dark -->
+              <div class="setting-mode py-3">
+                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i
+                    class="icofont-layout fs-4 me-2 text-primary"></i>Contrast Layout</h6>
+                <ul class="list-group list-unstyled mb-0 mt-1">
+                  <li class="list-group-item d-flex align-items-center py-1 px-2">
+                    <div class="form-check form-switch theme-switch mb-0">
+                      <input class="form-check-input" type="checkbox" id="theme-switch">
+                      <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
+                    </div>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center py-1 px-2">
+                    <div class="form-check form-switch theme-high-contrast mb-0">
+                      <input class="form-check-input" type="checkbox" id="theme-high-contrast">
+                      <label class="form-check-label" for="theme-high-contrast">Enable High
+                        Contrast</label>
+                    </div>
+                  </li>
+                  <li class="list-group-item d-flex align-items-center py-1 px-2">
+                    <div class="form-check form-switch theme-rtl mb-0">
+                      <input class="form-check-input" type="checkbox" id="theme-rtl">
+                      <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-start">
+              <button type="button" class="btn btn-white border lift" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary lift">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  {% block additions %}
+
+  {% endblock %}
+
+
+  <!-- Plugin Js -->
+  <script src="{% static 'adminAssets/assets/bundles/apexcharts.bundle.js' %}"></script>
+
+
+
+  <!-- Jquery Page Js -->
+  <script src="{% static 'adminAssets/assets/js/template.js' %}"></script>
+  <script src="{% static 'adminAssets/assets/js/page/index.js'%}"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1Jr7axGGkwvHRnNfoOzoVRFV3yOPHJEU&amp;callback=myMap"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.2/toastify.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  <script>
+    $('#myDataTable')
+      .addClass('nowrap')
+      .dataTable({
+        responsive: true,
+        columnDefs: [
+          { targets: [-1, -3], className: 'dt-body-right' }
+        ]
+      });
+  </script>
+
+</body>
+
+</html>
