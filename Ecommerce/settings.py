@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from accounts.private import SECRET_KEY
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^7kimq0_o*cede4y_35csexupvr-s!nr=0$#f1v%@5^2qb99%6'
+SECRET_KEY = SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -149,5 +150,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # razor pay
-RAZOR_KEY_ID = 'rzp_test_CyPI9bn2wBijjw'
-RAZOR_KEY_SECRET = 'zh7jniju168UPTgxBWCdUD5p'
+# RAZOR_KEY_ID = 'rzp_test_CyPI9bn2wBijjw'
+# RAZOR_KEY_SECRET = 'zh7jniju168UPTgxBWCdUD5p'
