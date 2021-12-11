@@ -43,8 +43,9 @@ class ProductImages(models.Model):
 
 
 class Wishlist(models.Model):
-    wishlist_id = models.CharField(max_length=250, blank=True)
-    user = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True)
+    wishlist_id = models.CharField(max_length=250, blank=True, null=True)
+    user = models.ForeignKey(
+        Account, on_delete=models.CASCADE, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     # def __str__(self):

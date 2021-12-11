@@ -11,6 +11,8 @@ from django.views.decorators.cache import cache_control
 # OTP auth
 import random
 from twilio.rest import Client
+
+from store.models import WishListItem, Wishlist
 from .private import account_sid, auth_token, service
 
 from carts.models import CartItem, Carts, Order
@@ -77,8 +79,77 @@ def signUp(request):
                     # user.address = address
                     user.save()
                     print("User saved")
-                    # session created
+
                     auth.login(request, user)
+
+                    try:
+                        # getting nonlogged user cart items
+                        user_username = request.user
+                        print("username : ", user_username)
+                        user_instance = Account.objects.get(
+                            username=user_username)
+                        if request.COOKIES['sessionid']:
+                            old_cart = request.COOKIES['sessionid']
+                            user = Carts.objects.get(cart_id=old_cart)
+                            cart_items = CartItem.objects.filter(
+                                cart=user, is_active=True).order_by('-id')
+                            for cart_item in cart_items:
+                                print(cart_item.product.product_name)
+                            # getting/creating newly logged users cart
+                            try:
+                                cart = Carts.objects.get(user=user_instance)
+                            except Carts.DoesNotExist:
+                                cart = Carts.objects.create(user=user_instance)
+                                cart.save()
+                            # saving old cart items to newly logged user cart
+                            for cart_item in cart_items:
+                                try:
+                                    item = CartItem.objects.get(
+                                        product=cart_item.product, cart=cart)
+                                    item.quantity += cart_item.quantity
+                                    item.save()
+                                except CartItem.DoesNotExist:
+                                    item = CartItem.objects.create(
+                                        product=cart_item.product, cart=cart, quantity=cart_item.quantity)
+                                    item.save()
+                    except ObjectDoesNotExist:
+                        pass
+                    try:
+                        # getting nonlogged user wishlist items
+                        user_username = request.user
+                        print("username : ", user_username)
+                        user_instance = Account.objects.get(
+                            username=user_username)
+                        if request.COOKIES['sessionid']:
+                            old_wishlist = request.COOKIES['sessionid']
+                            user = Wishlist.objects.get(
+                                wishlist_id=old_wishlist)
+                            wishlist_items = WishListItem.objects.filter(
+                                wishlist=user, is_active=True).order_by('-id')
+                            for wishlist_item in wishlist_items:
+                                print(wishlist_item.product.product_name)
+                            # getting/creating newly logged users wishlist
+                            try:
+                                wishlist = Wishlist.objects.get(
+                                    user=user_instance)
+                            except Wishlist.DoesNotExist:
+                                wishlist = Wishlist.objects.create(
+                                    user=user_instance)
+                                wishlist.save()
+                            # saving old wishlist items to newly logged user wishlist
+                            for wishlist_item in wishlist_items:
+                                try:
+                                    item = WishListItem.objects.get(
+                                        product=wishlist_item.product, wishlist=wishlist)
+                                    item.quantity += wishlist_item.quantity
+                                    item.save()
+                                except WishListItem.DoesNotExist:
+                                    item = WishListItem.objects.create(
+                                        product=wishlist_item.product, wishlist=wishlist, quantity=wishlist_item.quantity)
+                                    item.save()
+                    except ObjectDoesNotExist:
+                        pass
+                    # session created
                     request.session['user_login'] = True
                     return redirect(home)
             else:
@@ -144,6 +215,42 @@ def signIn(request):
                             item.save()
             except ObjectDoesNotExist:
                 pass
+
+            try:
+                # getting nonlogged user wishlist items
+                user_username = request.user
+                print("username : ", user_username)
+                user_instance = Account.objects.get(
+                    username=user_username)
+                if request.COOKIES['sessionid']:
+                    old_wishlist = request.COOKIES['sessionid']
+                    user = Wishlist.objects.get(
+                        wishlist_id=old_wishlist)
+                    wishlist_items = WishListItem.objects.filter(
+                        wishlist=user, is_active=True).order_by('-id')
+                    for wishlist_item in wishlist_items:
+                        print(wishlist_item.product.product_name)
+                    # getting/creating newly logged users wishlist
+                    try:
+                        wishlist = Wishlist.objects.get(
+                            user=user_instance)
+                    except Wishlist.DoesNotExist:
+                        wishlist = Wishlist.objects.create(
+                            user=user_instance)
+                        wishlist.save()
+                    # saving old wishlist items to newly logged user wishlist
+                    for wishlist_item in wishlist_items:
+                        try:
+                            item = WishListItem.objects.get(
+                                product=wishlist_item.product, wishlist=wishlist)
+                            item.quantity += wishlist_item.quantity
+                            item.save()
+                        except WishListItem.DoesNotExist:
+                            item = WishListItem.objects.create(
+                                product=wishlist_item.product, wishlist=wishlist, quantity=wishlist_item.quantity)
+                            item.save()
+            except ObjectDoesNotExist:
+                pass
             # session created
             request.session['user_login'] = True
             return redirect(home)
@@ -191,8 +298,78 @@ def submitOtp(request, phone_number):
                 .verification_checks \
                 .create(to=phone_number, code=otp_user)
             if verification_check.status == "approved":
-                request.session['user_login'] = True
+
                 auth.login(request, verified_user)
+
+                try:
+                    # getting nonlogged user cart items
+                    user_username = request.user
+                    print("username : ", user_username)
+                    user_instance = Account.objects.get(username=user_username)
+                    if request.COOKIES['sessionid']:
+                        old_cart = request.COOKIES['sessionid']
+                        user = Carts.objects.get(cart_id=old_cart)
+                        cart_items = CartItem.objects.filter(
+                            cart=user, is_active=True).order_by('-id')
+                        for cart_item in cart_items:
+                            print(cart_item.product.product_name)
+                        # getting/creating newly logged users cart
+                        try:
+                            cart = Carts.objects.get(user=user_instance)
+                        except Carts.DoesNotExist:
+                            cart = Carts.objects.create(user=user_instance)
+                            cart.save()
+                        # saving old cart items to newly logged user cart
+                        for cart_item in cart_items:
+                            try:
+                                item = CartItem.objects.get(
+                                    product=cart_item.product, cart=cart)
+                                item.quantity += cart_item.quantity
+                                item.save()
+                            except CartItem.DoesNotExist:
+                                item = CartItem.objects.create(
+                                    product=cart_item.product, cart=cart, quantity=cart_item.quantity)
+                                item.save()
+                except ObjectDoesNotExist:
+                    pass
+
+                try:
+                    # getting nonlogged user wishlist items
+                    user_username = request.user
+                    print("username : ", user_username)
+                    user_instance = Account.objects.get(
+                        username=user_username)
+                    if request.COOKIES['sessionid']:
+                        old_wishlist = request.COOKIES['sessionid']
+                        user = Wishlist.objects.get(
+                            wishlist_id=old_wishlist)
+                        wishlist_items = WishListItem.objects.filter(
+                            wishlist=user, is_active=True).order_by('-id')
+                        for wishlist_item in wishlist_items:
+                            print(wishlist_item.product.product_name)
+                        # getting/creating newly logged users wishlist
+                        try:
+                            wishlist = Wishlist.objects.get(
+                                user=user_instance)
+                        except Wishlist.DoesNotExist:
+                            wishlist = Wishlist.objects.create(
+                                user=user_instance)
+                            wishlist.save()
+                        # saving old wishlist items to newly logged user wishlist
+                        for wishlist_item in wishlist_items:
+                            try:
+                                item = WishListItem.objects.get(
+                                    product=wishlist_item.product, wishlist=wishlist)
+                                item.quantity += wishlist_item.quantity
+                                item.save()
+                            except WishListItem.DoesNotExist:
+                                item = WishListItem.objects.create(
+                                    product=wishlist_item.product, wishlist=wishlist, quantity=wishlist_item.quantity)
+                                item.save()
+                except ObjectDoesNotExist:
+                    pass
+                # session created
+                request.session['user_login'] = True
                 return redirect(home)
             else:
                 messages.info(request, 'Invalid Otp',

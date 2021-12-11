@@ -378,13 +378,13 @@ def wishlist(request, total=0, quantity=0, wishlist_items=None):
                 wishlist=user, is_active=True).order_by('-id')
             for wishlist_item in wishlist_items:
                 if wishlist_item.product.product_offer:
-                    total += (wishlist_items.product.sale_price *
-                              wishlist_items.quantity)
-                    quantity += wishlist_items.quantity
+                    total += (wishlist_item.product.product_offer_price *
+                              wishlist_item.quantity)
+                    quantity += wishlist_item.quantity
                 else:
-                    total += (wishlist_items.product.product_offer_price *
-                              wishlist_items.quantity)
-                    quantity += wishlist_items.quantity
+                    total += (wishlist_item.product.sale_price *
+                              wishlist_item.quantity)
+                    quantity += wishlist_item.quantity
 
     except ObjectDoesNotExist:
         pass
@@ -424,6 +424,7 @@ def add_wishlist(request):
             wishlist_item.save()
         return redirect('wishlist')
     else:
+        print("user auth none")
         product = Products.objects.get(id=product_id)
         try:
             wishlist = Wishlist.objects.get(wishlist_id=user_id(request))
@@ -431,7 +432,7 @@ def add_wishlist(request):
             wishlist = Wishlist.objects.create(wishlist_id=user_id(request))
         wishlist.save()
         try:
-            wishlist_item = Wishlist.objects.get(
+            wishlist_item = WishListItem.objects.get(
                 product=product, wishlist=wishlist)
             wishlist_item.quantity += 1
             wishlist_item.save()
