@@ -325,13 +325,13 @@
           // alert(response.razorpay_order_id);
           // alert(response.razorpay_signature)
           var razorpay_signature = response.razorpay_signature
-          var razorpay_order_id = payment_method_id
+          //var razorpay_order_id = payment_method_id
           var razorpay_payment_id = response.razorpay_payment_id
           var address_id = document.querySelector('input[name="address_id"]:checked').value;
           var payment_method = "razorpay";
           var total_price_updated_input = document.getElementById('total_price_updated_input').value;
           var coupon_code = document.getElementById('coupon_code').value;
-          var data = { 'address_id': address_id, 'csrf_token': '{{csrf_token}}', 'payment_method': payment_method, 'total_price_updated_input': total_price_updated_input, 'coupon_code': coupon_code, 'razorpay_signature': razorpay_signature, 'razorpay_order_id': razorpay_order_id, 'razorpay_payment_id': razorpay_payment_id }
+          var data = { 'address_id': address_id, 'csrf_token': '{{csrf_token}}', 'payment_method': payment_method, 'total_price_updated_input': total_price_updated_input, 'coupon_code': coupon_code, 'razorpay_signature': razorpay_signature, 'razorpay_payment_id': razorpay_payment_id }
           console.log("response in data : ", data.razorpay_response)
           $.ajax({
             url: "{% url 'checkout' id %}",

@@ -327,10 +327,8 @@ def checkout(request, total=0, quantity=0, cart_items=None, checkout_identifier=
         if request.POST.get('payment_method') == 'razorpay':
             payment_method = request.POST['payment_method']
             razorpay_signature = request.POST['razorpay_signature']
-            razorpay_order_id = request.POST['razorpay_order_id']
             razorpay_payment_id = request.POST['razorpay_payment_id']
             print("signature :", razorpay_signature)
-            print("order id :", razorpay_order_id)
             print("order id :", razorpay_payment_id)
 
         order_address = address_data.first_name + ", " + \
