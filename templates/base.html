@@ -117,6 +117,7 @@
 
         <ul class="mobile-menu">
 
+          <li><a href="{% url 'listProductsPage' %}">Products</a></li>
           <li><a href="{% url 'wishlist' %}">My Wishlist</a></li>
           <li><a href="{% url 'cart' %}">Cart</a></li>
           {% if user.id is None %}
@@ -149,29 +150,35 @@
 
   <div class="sticky-navbar">
     <div class="sticky-info">
-      <a href="home.html">
+      <a href="{% url 'home' %}">
         <i class="icon-home"></i>Home
       </a>
     </div>
     <div class="sticky-info">
-      <a href="category.html" class="">
+      <a href="{% url 'listProductsPage' %}" class="">
         <i class="icon-bars"></i>Categories
       </a>
     </div>
     <div class="sticky-info">
-      <a href="wishlist.html" class="">
+      <a href="{% url 'wishlist' %}" class="">
         <i class="icon-wishlist-2"></i>Wishlist
       </a>
     </div>
     <div class="sticky-info">
-      <a href="login.html" class="">
+      {% if user.id is not None %}
+      <a href="{% url 'userDashboard' %}" class="">
         <i class="icon-user-2"></i>Account
       </a>
+      {% else %}
+      <a href="{% url 'signUp' %}" class="">
+        <i class="icon-user-2"></i>Account
+      </a>
+      {% endif %}
     </div>
     <div class="sticky-info">
-      <a href="cart.html" class="">
+      <a href="{% url 'cart' %}" class="">
         <i class="icon-shopping-cart position-relative">
-          <span class="cart-count badge-circle">3</span>
+          <span class="cart-count badge-circle">{{cart_count}}</span>
         </i>Cart
       </a>
     </div>
